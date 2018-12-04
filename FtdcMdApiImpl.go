@@ -18,7 +18,7 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/djimenez/iconv-go"
+	iconv "github.com/djimenez/iconv-go"
 )
 
 // QMdAPICallback 行情API回调接口
@@ -377,6 +377,10 @@ func (api *QMdAPI) InitAPI(flowPath string) {
 
 // RegisterCallback 注册用户回调接口
 func (api *QMdAPI) RegisterCallback(cb QMdAPICallback) {
+	if api.clientID == 0 {
+		panic("Please call function InitApi first.")
+	}
+
 	callback = cb
 
 	C.SetCallbackFunOnFrontConnected(C.int(api.clientID), (C.FunOnFrontConnected)(unsafe.Pointer(C.cgoOnFrontConnected)))
@@ -451,24 +455,13 @@ func (api *QMdAPI) Login(login *GoQdamFtdcReqUserLoginField) int {
 
 	loginReq := C.CQdamFtdcReqUserLoginField{}
 
-	// defer C.free(unsafe.Pointer(&loginReq))
-
-	// userID, _ := iconv.ConvertString(login.UserID, "utf-8", "gbk")
-	// cUserID := C.CString(userID)
 	cUserID := C.CString(login.UserID)
-	// defer C.free(unsafe.Pointer(&cUserID))
 	C.strncpy(&loginReq.UserID[0], cUserID, C.sizeof_TQdamFtdcUserIDType-1)
 
-	// brokerID, _ := iconv.ConvertString(login.BrokerID, "utf-8", "gbk")
-	// cBrokerID := C.CString(brokerID)
 	cBrokerID := C.CString(login.BrokerID)
-	// defer C.free(unsafe.Pointer(&cBrokerID))
 	C.strncpy(&loginReq.BrokerID[0], cBrokerID, C.sizeof_TQdamFtdcBrokerIDType-1)
 
-	// password, _ := iconv.ConvertString(login.Password, "utf-8", "gbk")
-	// cPassword := C.CString(password)
 	cPassword := C.CString(login.Password)
-	// defer C.free(unsafe.Pointer(&cPassword))
 	C.strncpy(&loginReq.Password[0], cPassword, C.sizeof_TQdamFtdcPasswordType-1)
 
 	rtn := C.ReqUserLogin(C.int(api.clientID), &loginReq, C.int(api.nextReqID()))
@@ -488,8 +481,6 @@ func (api *QMdAPI) SubMarketData(instruments ...string) {
 
 	for idx := 0; idx < count; idx++ {
 		cStrings[idx] = C.CString(instruments[idx])
-
-		defer C.free(unsafe.Pointer(&cStrings[idx]))
 	}
 
 	C.SubMarketData(C.int(api.clientID), &cStrings[0], C.int(count))
@@ -502,8 +493,6 @@ func (api *QMdAPI) UnSubMarketData(instruments ...string) {
 
 	for idx := 0; idx < count; idx++ {
 		cStrings[idx] = C.CString(instruments[idx])
-
-		defer C.free(unsafe.Pointer(&cStrings[idx]))
 	}
 
 	C.UnSubMarketData(C.int(api.clientID), &cStrings[0], C.int(count))
@@ -523,7 +512,7 @@ func (api *QMdAPI) OnFrontDisConnected(reason int) {
 
 // OnHeartBeatWarning 心跳失败消息
 func (api *QMdAPI) OnHeartBeatWarning(time int) {
-	log.Panicf("Missing heartbeat in %d seconds\n", time)
+	log.Printf("Missing heartbeat in %d seconds\n", time)
 }
 
 // OnPackageStart 系列数据包开始消息
