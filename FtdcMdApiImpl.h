@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////
 ///@system QuantDo Platform
-///@company ÉÏº£Á¿Í¶ÍøÂç¿Æ¼¼ÓĞÏŞ¹«Ë¾
+///@company ä¸Šæµ·é‡æŠ•ç½‘ç»œç§‘æŠ€æœ‰é™å…¬å¸
 ///@file FtdcMdApiImpl.h
-///@brief ¶¨ÒåÁË¿Í»§¶Ëc½Ó¿Ú
+///@brief å®šä¹‰äº†å®¢æˆ·ç«¯cæ¥å£
 ///@history
-///20160918	·¶´ºÑô	´´½¨¸ÃÎÄ¼ş
+///20160918	èŒƒæ˜¥é˜³	åˆ›å»ºè¯¥æ–‡ä»¶
 /////////////////////////////////////////////////////////////////////////
 
 #ifndef FTDCMDAPIIMPL_H
@@ -30,177 +30,177 @@ typedef int ClientID;
 extern "C" {
 #endif
 
-//=============================[ÉèÖÃ»Øµ÷º¯Êı]================================
-///µ±¿Í»§¶ËÓë½»Ò×ºóÌ¨½¨Á¢ÆğÍ¨ĞÅÁ¬½ÓÊ±£¨»¹Î´µÇÂ¼Ç°£©£¬¸Ã·½·¨±»µ÷ÓÃ¡£
-typedef void (APPWINAPI *FunOnFrontConnected)();//»Øµ÷º¯Êı
-MDUSER_API_EXPORT int SetCallbackFunOnFrontConnected(ClientID client,FunOnFrontConnected funHandle);//µ÷ÓÃ»Øµ÷º¯ÊıµÄÖ¸Õë
+//=============================[è®¾ç½®å›è°ƒå‡½æ•°]================================
+///å½“å®¢æˆ·ç«¯ä¸äº¤æ˜“åå°å»ºç«‹èµ·é€šä¿¡è¿æ¥æ—¶ï¼ˆè¿˜æœªç™»å½•å‰ï¼‰ï¼Œè¯¥æ–¹æ³•è¢«è°ƒç”¨ã€‚
+typedef void (APPWINAPI *FunOnFrontConnected)();//å›è°ƒå‡½æ•°
+MDUSER_API_EXPORT int SetCallbackFunOnFrontConnected(ClientID client,FunOnFrontConnected funHandle);//è°ƒç”¨å›è°ƒå‡½æ•°çš„æŒ‡é’ˆ
 
-///µ±¿Í»§¶ËÓë½»Ò×ºóÌ¨Í¨ĞÅÁ¬½Ó¶Ï¿ªÊ±£¬¸Ã·½·¨±»µ÷ÓÃ¡£µ±·¢ÉúÕâ¸öÇé¿öºó£¬API»á×Ô¶¯ÖØĞÂÁ¬½Ó£¬¿Í»§¶Ë¿É²»×ö´¦Àí¡£
-///@param nReason ´íÎóÔ­Òò
-///        0x1001 ÍøÂç¶ÁÊ§°Ü
-///        0x1002 ÍøÂçĞ´Ê§°Ü
-///        0x2001 ½ÓÊÕĞÄÌø³¬Ê±
-///        0x2002 ·¢ËÍĞÄÌøÊ§°Ü
-///        0x2003 ÊÕµ½´íÎó±¨ÎÄ
+///å½“å®¢æˆ·ç«¯ä¸äº¤æ˜“åå°é€šä¿¡è¿æ¥æ–­å¼€æ—¶ï¼Œè¯¥æ–¹æ³•è¢«è°ƒç”¨ã€‚å½“å‘ç”Ÿè¿™ä¸ªæƒ…å†µåï¼ŒAPIä¼šè‡ªåŠ¨é‡æ–°è¿æ¥ï¼Œå®¢æˆ·ç«¯å¯ä¸åšå¤„ç†ã€‚
+///@param nReason é”™è¯¯åŸå› 
+///        0x1001 ç½‘ç»œè¯»å¤±è´¥
+///        0x1002 ç½‘ç»œå†™å¤±è´¥
+///        0x2001 æ¥æ”¶å¿ƒè·³è¶…æ—¶
+///        0x2002 å‘é€å¿ƒè·³å¤±è´¥
+///        0x2003 æ”¶åˆ°é”™è¯¯æŠ¥æ–‡
 typedef void (APPWINAPI *FunOnFrontDisconnected)(int nReason);
 MDUSER_API_EXPORT int SetCallbackFunOnFrontDisconnected(ClientID client,FunOnFrontDisconnected funHandle);
 
-///ĞÄÌø³¬Ê±¾¯¸æ¡£µ±³¤Ê±¼äÎ´ÊÕµ½±¨ÎÄÊ±£¬¸Ã·½·¨±»µ÷ÓÃ¡£
-///@param nTimeLapse ¾àÀëÉÏ´Î½ÓÊÕ±¨ÎÄµÄÊ±¼ä
+///å¿ƒè·³è¶…æ—¶è­¦å‘Šã€‚å½“é•¿æ—¶é—´æœªæ”¶åˆ°æŠ¥æ–‡æ—¶ï¼Œè¯¥æ–¹æ³•è¢«è°ƒç”¨ã€‚
+///@param nTimeLapse è·ç¦»ä¸Šæ¬¡æ¥æ”¶æŠ¥æ–‡çš„æ—¶é—´
 typedef void (APPWINAPI *FunOnHeartBeatWarning)(int nTimeLapse);
 MDUSER_API_EXPORT int SetCallbackFunOnHeartBeatWarning(ClientID client,FunOnHeartBeatWarning funHandle);
 
-///±¨ÎÄ»Øµ÷¿ªÊ¼Í¨Öª¡£µ±APIÊÕµ½Ò»¸ö±¨ÎÄºó£¬Ê×ÏÈµ÷ÓÃ±¾·½·¨£¬È»ºóÊÇ¸÷Êı¾İÓòµÄ»Øµ÷£¬×îºóÊÇ±¨ÎÄ»Øµ÷½áÊøÍ¨Öª¡£
-///@param nID Ö÷Ìâ´úÂë£¨ÈçË½ÓĞÁ÷¡¢¹«¹²Á÷¡¢ĞĞÇéÁ÷µÈ£©
-///@param nSequenceNo ±¨ÎÄĞòºÅ
+///æŠ¥æ–‡å›è°ƒå¼€å§‹é€šçŸ¥ã€‚å½“APIæ”¶åˆ°ä¸€ä¸ªæŠ¥æ–‡åï¼Œé¦–å…ˆè°ƒç”¨æœ¬æ–¹æ³•ï¼Œç„¶åæ˜¯å„æ•°æ®åŸŸçš„å›è°ƒï¼Œæœ€åæ˜¯æŠ¥æ–‡å›è°ƒç»“æŸé€šçŸ¥ã€‚
+///@param nID ä¸»é¢˜ä»£ç ï¼ˆå¦‚ç§æœ‰æµã€å…¬å…±æµã€è¡Œæƒ…æµç­‰ï¼‰
+///@param nSequenceNo æŠ¥æ–‡åºå·
 typedef void (APPWINAPI *FunOnPackageStart)(int nTopicID, int nSequenceNo);
 MDUSER_API_EXPORT int SetCallbackFunOnPackageStart(ClientID client,FunOnPackageStart funHandle);
 
-///±¨ÎÄ»Øµ÷½áÊøÍ¨Öª¡£µ±APIÊÕµ½Ò»¸ö±¨ÎÄºó£¬Ê×ÏÈµ÷ÓÃ±¨ÎÄ»Øµ÷¿ªÊ¼Í¨Öª£¬È»ºóÊÇ¸÷Êı¾İÓòµÄ»Øµ÷£¬×îºóµ÷ÓÃ±¾·½·¨¡£
-///@param nTopicID Ö÷Ìâ´úÂë£¨ÈçË½ÓĞÁ÷¡¢¹«¹²Á÷¡¢ĞĞÇéÁ÷µÈ£©
-///@param nSequenceNo ±¨ÎÄĞòºÅ
+///æŠ¥æ–‡å›è°ƒç»“æŸé€šçŸ¥ã€‚å½“APIæ”¶åˆ°ä¸€ä¸ªæŠ¥æ–‡åï¼Œé¦–å…ˆè°ƒç”¨æŠ¥æ–‡å›è°ƒå¼€å§‹é€šçŸ¥ï¼Œç„¶åæ˜¯å„æ•°æ®åŸŸçš„å›è°ƒï¼Œæœ€åè°ƒç”¨æœ¬æ–¹æ³•ã€‚
+///@param nTopicID ä¸»é¢˜ä»£ç ï¼ˆå¦‚ç§æœ‰æµã€å…¬å…±æµã€è¡Œæƒ…æµç­‰ï¼‰
+///@param nSequenceNo æŠ¥æ–‡åºå·
 typedef void (APPWINAPI *FunOnPackageEnd)(int nTopicID, int nSequenceNo);
 MDUSER_API_EXPORT int SetCallbackFunOnPackageEnd(ClientID client,FunOnPackageEnd funHandle);
 
-///ĞÂÔö¶à²¥ĞÄÌø½Ó¿Ú
+///æ–°å¢å¤šæ’­å¿ƒè·³æ¥å£
 typedef void (APPWINAPI *FunOnMultiHeartbeat)(char *CurrTime,char *MultiCastIP);
 MDUSER_API_EXPORT int SetCallbackFunOnMultiHeartbeat(ClientID client,FunOnMultiHeartbeat funHandle);
 
-///¶©ÔÄ¶à²¥Ö÷Ìâ
+///è®¢é˜…å¤šæ’­ä¸»é¢˜
 typedef void (APPWINAPI *FunOnStopMultiTopic)(int nTopicID);
 MDUSER_API_EXPORT int SetCallbackFunOnStopMultiTopic(ClientID client,FunOnStopMultiTopic funHandle);
 
 typedef void (APPWINAPI *FunUdpMarketData)(CQdamFtdcDepthMarketDataField *qmdata);
 MDUSER_API_EXPORT int SetCallbackFunUdpMarketData(ClientID client,FunUdpMarketData funHandle);
-///´íÎóÓ¦´ğ
+///é”™è¯¯åº”ç­”
 typedef void (APPWINAPI *FunOnRspError)(CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspError(ClientID client,FunOnRspError funHandle);
-///ÓÃ»§µÇÂ¼Ó¦´ğ
+///ç”¨æˆ·ç™»å½•åº”ç­”
 typedef void (APPWINAPI *FunOnRspUserLogin)(CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspUserLogin(ClientID client,FunOnRspUserLogin funHandle);
-///ÓÃ»§ÍË³öÓ¦´ğ
+///ç”¨æˆ·é€€å‡ºåº”ç­”
 typedef void (APPWINAPI *FunOnRspUserLogout)(CQdamFtdcRspUserLogoutField *pRspUserLogout, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspUserLogout(ClientID client,FunOnRspUserLogout funHandle);
-///Éî¶ÈĞĞÇéÍ¨Öª
+///æ·±åº¦è¡Œæƒ…é€šçŸ¥
 typedef void (APPWINAPI *FunOnRtnDepthMarketData)(CQdamFtdcDepthMarketDataField* pDepthMarketData);
 MDUSER_API_EXPORT int SetCallbackFunOnRtnDepthMarketData(ClientID client,FunOnRtnDepthMarketData funHandle);
-///Éî¶ÈĞĞÇéÍ¨Öª
+///æ·±åº¦è¡Œæƒ…é€šçŸ¥
 typedef void (APPWINAPI *FunOnRtnMultiDepthMarketData)(CQdamFtdcDepthMarketDataField* pDepthMarketData);
 MDUSER_API_EXPORT int SetCallbackFunOnRtnMultiDepthMarketData(ClientID client,FunOnRtnMultiDepthMarketData funHandle);
-///¶©ÔÄºÏÔ¼µÄÏà¹ØĞÅÏ¢
+///è®¢é˜…åˆçº¦çš„ç›¸å…³ä¿¡æ¯
 typedef void (APPWINAPI *FunOnRspSubMarketData)(CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspSubMarketData(ClientID client,FunOnRspSubMarketData funHandle);
-///ÍË¶©ºÏÔ¼µÄÏà¹ØĞÅÏ¢
+///é€€è®¢åˆçº¦çš„ç›¸å…³ä¿¡æ¯
 typedef void (APPWINAPI *FunOnRspUnSubMarketData)(CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspUnSubMarketData(ClientID client,FunOnRspUnSubMarketData funHandle);
-///·Ö¼ÛĞĞÇé
+///åˆ†ä»·è¡Œæƒ…
 typedef void (APPWINAPI *FunOnRtnMBLMarketData)(CQdamFtdcMBLMarketDataField *pMBLMarketData);
 MDUSER_API_EXPORT int SetCallbackFunOnRtnMBLMarketData(ClientID client,FunOnRtnMBLMarketData funHandle);
-///Ö£ÖİºÏÔ¼×´Ì¬
+///éƒ‘å·åˆçº¦çŠ¶æ€
 typedef void (APPWINAPI *FunOnRtnQmdInstrumentStatu)(CQdamFtdcQmdInstrumentStateField *pQmdInstrumentState);
 MDUSER_API_EXPORT int SetCallbackFunOnRtnQmdInstrumentStatu(ClientID client,FunOnRtnQmdInstrumentStatu funHandle);
-///¶©ÔÄÖ÷ÌâÓ¦´ğ
+///è®¢é˜…ä¸»é¢˜åº”ç­”
 typedef void (APPWINAPI *FunOnRspSubscribeTopic)(CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspSubscribeTopic(ClientID client,FunOnRspSubscribeTopic funHandle);
-///Ö÷Ìâ²éÑ¯Ó¦´ğ
+///ä¸»é¢˜æŸ¥è¯¢åº”ç­”
 typedef void (APPWINAPI *FunOnRspQryTopic)(CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspQryTopic(ClientID client,FunOnRspQryTopic funHandle);
-///ºÏÔ¼ĞĞÇéÓ¦´ğ
+///åˆçº¦è¡Œæƒ…åº”ç­”
 typedef void (APPWINAPI *FunOnRspQryMarketData)(CQdamFtdcRspMarketDataField *pRspMarketData, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast);
 MDUSER_API_EXPORT int SetCallbackFunOnRspQryMarketData(ClientID client,FunOnRspQryMarketData funHandle);
 //==================================================================================================
 
-///³õÊ¼»¯»·¾³
+///åˆå§‹åŒ–ç¯å¢ƒ
 MDUSER_API_EXPORT void Init(ClientID client);
 
 MDUSER_API_EXPORT int Join(ClientID client);
 
-///ÊÍ·ÅAPI
+///é‡Šæ”¾API
 MDUSER_API_EXPORT void Release(ClientID client);
 
 MDUSER_API_EXPORT int InitApi(const char *pszFlowPath);
 
-///»ñÈ¡µ±Ç°½»Ò×ÈÕ
-///@retrun »ñÈ¡µ½µÄ½»Ò×ÈÕ
-///@remark Ö»ÓĞµÇÂ¼³É¹¦ºó,²ÅÄÜµÃµ½ÕıÈ·µÄ½»Ò×ÈÕ
+///è·å–å½“å‰äº¤æ˜“æ—¥
+///@retrun è·å–åˆ°çš„äº¤æ˜“æ—¥
+///@remark åªæœ‰ç™»å½•æˆåŠŸå,æ‰èƒ½å¾—åˆ°æ­£ç¡®çš„äº¤æ˜“æ—¥
 MDUSER_API_EXPORT const char *GetTradingDay(ClientID client);
 
-///¶à²¥ÉèÖÃ¿ª¹Ø
+///å¤šæ’­è®¾ç½®å¼€å…³
 MDUSER_API_EXPORT void SetMultiCast(ClientID client,bool bMultiCast);
 
-//×¢²á¶à²¥µØÖ·
+//æ³¨å†Œå¤šæ’­åœ°å€
 MDUSER_API_EXPORT void RegTopicMultiAddr(ClientID client,char *pMultiAddr);
 
-///×¢²áÇ°ÖÃ»úÍøÂçµØÖ·
-///@param pszFrontAddress£ºÇ°ÖÃ»úÍøÂçµØÖ·¡£
-///@remark ÍøÂçµØÖ·µÄ¸ñÊ½Îª£º¡°protocol://ipaddress:port¡±£¬Èç£º¡±tcp://127.0.0.1:17001¡±¡£ 
-///@remark ¡°tcp¡±´ú±í´«ÊäĞ­Òé£¬¡°127.0.0.1¡±´ú±í·şÎñÆ÷µØÖ·¡£¡±17001¡±´ú±í·şÎñÆ÷¶Ë¿ÚºÅ¡£
+///æ³¨å†Œå‰ç½®æœºç½‘ç»œåœ°å€
+///@param pszFrontAddressï¼šå‰ç½®æœºç½‘ç»œåœ°å€ã€‚
+///@remark ç½‘ç»œåœ°å€çš„æ ¼å¼ä¸ºï¼šâ€œprotocol://ipaddress:portâ€ï¼Œå¦‚ï¼šâ€tcp://127.0.0.1:17001â€ã€‚ 
+///@remark â€œtcpâ€ä»£è¡¨ä¼ è¾“åè®®ï¼Œâ€œ127.0.0.1â€ä»£è¡¨æœåŠ¡å™¨åœ°å€ã€‚â€17001â€ä»£è¡¨æœåŠ¡å™¨ç«¯å£å·ã€‚
 MDUSER_API_EXPORT void RegisterFront(ClientID client,char *pszFrontAddress);
 
-///×¢²áÃû×Ö·şÎñÆ÷ÍøÂçµØÖ·
-///@param pszNsAddress£ºÃû×Ö·şÎñÆ÷ÍøÂçµØÖ·¡£
-///@remark ÍøÂçµØÖ·µÄ¸ñÊ½Îª£º¡°protocol://ipaddress:port¡±£¬Èç£º¡±tcp://127.0.0.1:12001¡±¡£ 
-///@remark ¡°tcp¡±´ú±í´«ÊäĞ­Òé£¬¡°127.0.0.1¡±´ú±í·şÎñÆ÷µØÖ·¡£¡±12001¡±´ú±í·şÎñÆ÷¶Ë¿ÚºÅ¡£
-///@remark RegisterFrontÓÅÏÈÓÚRegisterNameServer
+///æ³¨å†Œåå­—æœåŠ¡å™¨ç½‘ç»œåœ°å€
+///@param pszNsAddressï¼šåå­—æœåŠ¡å™¨ç½‘ç»œåœ°å€ã€‚
+///@remark ç½‘ç»œåœ°å€çš„æ ¼å¼ä¸ºï¼šâ€œprotocol://ipaddress:portâ€ï¼Œå¦‚ï¼šâ€tcp://127.0.0.1:12001â€ã€‚ 
+///@remark â€œtcpâ€ä»£è¡¨ä¼ è¾“åè®®ï¼Œâ€œ127.0.0.1â€ä»£è¡¨æœåŠ¡å™¨åœ°å€ã€‚â€12001â€ä»£è¡¨æœåŠ¡å™¨ç«¯å£å·ã€‚
+///@remark RegisterFrontä¼˜å…ˆäºRegisterNameServer
 MDUSER_API_EXPORT void RegisterNameServer(ClientID client,char *pszNsAddress);
 
-///¶©ÔÄÊĞ³¡ĞĞÇé¡£
-///@param nTopicID ÊĞ³¡ĞĞÇéÖ÷Ìâ  
-///@param nResumeType ÊĞ³¡ĞĞÇéÖØ´«·½Ê½  
-///        QDAM_TERT_RESTART:´Ó±¾½»Ò×ÈÕ¿ªÊ¼ÖØ´«
-///        QDAM_TERT_RESUME:´ÓÉÏ´ÎÊÕµ½µÄĞø´«(·Ç¶©ÔÄÈ«²¿ºÏÔ¼Ê±£¬²»Ö§³ÖĞø´«Ä£Ê½)
-///        QDAM_TERT_QUICK:ÏÈ´«ËÍµ±Ç°ĞĞÇé¿ìÕÕ,ÔÙ´«ËÍµÇÂ¼ºóÊĞ³¡ĞĞÇéµÄÄÚÈİ
-///@remark ¸Ã·½·¨ÒªÔÚInit·½·¨Ç°µ÷ÓÃ¡£Èô²»µ÷ÓÃÔò²»»áÊÕµ½Ë½ÓĞÁ÷µÄÊı¾İ¡£
+///è®¢é˜…å¸‚åœºè¡Œæƒ…ã€‚
+///@param nTopicID å¸‚åœºè¡Œæƒ…ä¸»é¢˜  
+///@param nResumeType å¸‚åœºè¡Œæƒ…é‡ä¼ æ–¹å¼  
+///        QDAM_TERT_RESTART:ä»æœ¬äº¤æ˜“æ—¥å¼€å§‹é‡ä¼ 
+///        QDAM_TERT_RESUME:ä»ä¸Šæ¬¡æ”¶åˆ°çš„ç»­ä¼ (éè®¢é˜…å…¨éƒ¨åˆçº¦æ—¶ï¼Œä¸æ”¯æŒç»­ä¼ æ¨¡å¼)
+///        QDAM_TERT_QUICK:å…ˆä¼ é€å½“å‰è¡Œæƒ…å¿«ç…§,å†ä¼ é€ç™»å½•åå¸‚åœºè¡Œæƒ…çš„å†…å®¹
+///@remark è¯¥æ–¹æ³•è¦åœ¨Initæ–¹æ³•å‰è°ƒç”¨ã€‚è‹¥ä¸è°ƒç”¨åˆ™ä¸ä¼šæ”¶åˆ°ç§æœ‰æµçš„æ•°æ®ã€‚
 MDUSER_API_EXPORT void SubscribeMarketDataTopic(ClientID client,int nTopicID, QDAM_TE_RESUME_TYPE nResumeType);
 
-///¶©ÔÄºÏÔ¼ĞĞÇé¡£
-///@param ppInstrumentID ºÏÔ¼ID  
-///@param nCount Òª¶©ÔÄ/ÍË¶©ĞĞÇéµÄºÏÔ¼¸öÊı
+///è®¢é˜…åˆçº¦è¡Œæƒ…ã€‚
+///@param ppInstrumentID åˆçº¦ID  
+///@param nCount è¦è®¢é˜…/é€€è®¢è¡Œæƒ…çš„åˆçº¦ä¸ªæ•°
 ///@remark 
 MDUSER_API_EXPORT void SubMarketData(ClientID client,char *ppInstrumentID[], int nCount);
 
-///ÍË¶©ºÏÔ¼ĞĞÇé¡£
-///@param ppInstrumentID ºÏÔ¼ID  
-///@param nCount Òª¶©ÔÄ/ÍË¶©ĞĞÇéµÄºÏÔ¼¸öÊı
+///é€€è®¢åˆçº¦è¡Œæƒ…ã€‚
+///@param ppInstrumentID åˆçº¦ID  
+///@param nCount è¦è®¢é˜…/é€€è®¢è¡Œæƒ…çš„åˆçº¦ä¸ªæ•°
 ///@remark
 MDUSER_API_EXPORT void UnSubMarketData(ClientID client,char *ppInstrumentID[], int nCount);
 
-///ÉèÖÃĞÄÌø³¬Ê±Ê±¼ä¡£
-///@param timeout ĞÄÌø³¬Ê±Ê±¼ä(Ãë)  
+///è®¾ç½®å¿ƒè·³è¶…æ—¶æ—¶é—´ã€‚
+///@param timeout å¿ƒè·³è¶…æ—¶æ—¶é—´(ç§’)  
 MDUSER_API_EXPORT void SetHeartbeatTimeout(ClientID client,unsigned int timeout);
 
-///¹²ÏíÄÚ´æÈ¡Öµ
-///@param CQdamFtdcShmDepthMarketDataField  ´«Èë²ÎÊı
-///@param CQdamFtdcDepthMarketDataField ²éÑ¯µ½µÄĞĞÇéÖµ
-///@return 0 ²Ù×÷³É¹¦
-///@return -1 ´ò¿ªÈÕÖ¾ÎÄ¼şÊ§°Ü
+///å…±äº«å†…å­˜å–å€¼
+///@param CQdamFtdcShmDepthMarketDataField  ä¼ å…¥å‚æ•°
+///@param CQdamFtdcDepthMarketDataField æŸ¥è¯¢åˆ°çš„è¡Œæƒ…å€¼
+///@return 0 æ“ä½œæˆåŠŸ
+///@return -1 æ‰“å¼€æ—¥å¿—æ–‡ä»¶å¤±è´¥
 MDUSER_API_EXPORT void ShmMarketData(ClientID client,CQdamFtdcShmDepthMarketDataField *reqfield,CQdamFtdcDepthMarketDataField *defdata);
 
-///½¨Á¢UDPÁ¬½Ó
-///@param  udpip¹ã²¥µØÖ·
-///@return 0 ²Ù×÷³É¹¦
-///@return -1 ¶ÁÈ¡UDPÊ§°Ü
+///å»ºç«‹UDPè¿æ¥
+///@param  udpipå¹¿æ’­åœ°å€
+///@return 0 æ“ä½œæˆåŠŸ
+///@return -1 è¯»å–UDPå¤±è´¥
 MDUSER_API_EXPORT void setudpchannel(ClientID client,char *udpip);
 
-///ÓÃ»§µÇÂ¼ÇëÇó
+///ç”¨æˆ·ç™»å½•è¯·æ±‚
 MDUSER_API_EXPORT int ReqUserLogin(ClientID client,CQdamFtdcReqUserLoginField *pReqUserLogin, int nRequestID);
 
-///ÓÃ»§ÍË³öÇëÇó
+///ç”¨æˆ·é€€å‡ºè¯·æ±‚
 MDUSER_API_EXPORT int ReqUserLogout(ClientID client,CQdamFtdcReqUserLogoutField *pReqUserLogout, int nRequestID);
 
-///¶©ÔÄºÏÔ¼µÄÏà¹ØĞÅÏ¢
+///è®¢é˜…åˆçº¦çš„ç›¸å…³ä¿¡æ¯
 MDUSER_API_EXPORT int ReqSubMarketData(ClientID client,CQdamFtdcSpecificInstrumentField *pSpecificInstrument, int nRequestID);
 
-///ÍË¶©ºÏÔ¼µÄÏà¹ØĞÅÏ¢
+///é€€è®¢åˆçº¦çš„ç›¸å…³ä¿¡æ¯
 MDUSER_API_EXPORT int ReqUnSubMarketData(ClientID client,CQdamFtdcSpecificInstrumentField *pSpecificInstrument, int nRequestID);
 
-///¶©ÔÄÖ÷ÌâÇëÇó
+///è®¢é˜…ä¸»é¢˜è¯·æ±‚
 MDUSER_API_EXPORT int ReqSubscribeTopic(ClientID client,CQdamFtdcDisseminationField *pDissemination, int nRequestID);
 
-///Ö÷Ìâ²éÑ¯ÇëÇó
+///ä¸»é¢˜æŸ¥è¯¢è¯·æ±‚
 MDUSER_API_EXPORT int ReqQryTopic(ClientID client,CQdamFtdcDisseminationField *pDissemination, int nRequestID);
 
-///ºÏÔ¼ĞĞÇé²éÑ¯
+///åˆçº¦è¡Œæƒ…æŸ¥è¯¢
 MDUSER_API_EXPORT int ReqQryMarketData(ClientID client,CQdamFtdcQryMarketDataField *pQryMarketData, int nRequestID);
 
 MDUSER_API_EXPORT void ActiveMultiMarketData(ClientID client,char *TradingDay);
