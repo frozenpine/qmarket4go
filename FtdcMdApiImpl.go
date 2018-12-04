@@ -13,6 +13,7 @@ import "C"
 import (
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -426,8 +427,24 @@ func goOnRspQryMarketData(pRspMarketData *C.CQdamFtdcRspMarketDataField, pRspInf
 	}
 }
 
+func pathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+
 // InitAPI 初始化行情API
 func (api *QMdAPI) InitAPI(flowPath string) {
+	exist, _ := pathExists(flowPath)
+	if !exist {
+		os.Mkdir(flowPath, os.ModePerm)
+	}
+
 	clientID := int(C.InitApi(C.CString(flowPath)))
 	api.clientID = clientID
 }
