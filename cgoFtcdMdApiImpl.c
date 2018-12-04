@@ -3,142 +3,142 @@
 #endif
 #include "cgoFtcdMdApiImpl.h"
 
-void cgoOnFrontConnected() {
+void cgoOnFrontConnected(int client) {
 	#ifdef _DEBUG
 	printf("OnFrontConnected callback in cgo.\n");
 	#endif
-	goOnFrontConnected();
+	goOnFrontConnected(client);
 }
 
-void cgoOnFrontDisconnected(int nReason) {
+void cgoOnFrontDisconnected(int client, int nReason) {
 	#ifdef _DEBUG
 	printf("OnFrontDisconnected callback in cgo.\n");
 	#endif
-	goOnFrontDisconnected(nReason);
+	goOnFrontDisconnected(client, nReason);
 }
 
-void cgoOnHeartBeatWarning(int nTimeLapse) {
+void cgoOnHeartBeatWarning(int client, int nTimeLapse) {
 	#ifdef _DEBUG
 	printf("OnHeartBeatWarning callback in cgo.\n");
 	#endif
-	goOnHeartBeatWarning(nTimeLapse);
+	goOnHeartBeatWarning(client, nTimeLapse);
 }
 
-void cgoOnPackageStart(int nTopicID, int nSequenceNo) {
+void cgoOnPackageStart(int client, int nTopicID, int nSequenceNo) {
 	#ifdef _DEBUG
 	printf("OnPackageStart callback in cgo.\n");
 	#endif
-	goOnPackageStart(nTopicID, nSequenceNo);
+	goOnPackageStart(client, nTopicID, nSequenceNo);
 }
 
-void cgoOnPackageEnd(int nTopicID, int nSequenceNo) {
+void cgoOnPackageEnd(int client, int nTopicID, int nSequenceNo) {
 	#ifdef _DEBUG
 	printf("OnPackageEnd callback in cgo.\n");
 	#endif
-	goOnPackageEnd(nTopicID, nSequenceNo);
+	goOnPackageEnd(client, nTopicID, nSequenceNo);
 }
 
-void cgoOnMultiHeartbeat(char *CurrTime,char *MultiCastIP) {
+void cgoOnMultiHeartbeat(int client, char *CurrTime,char *MultiCastIP) {
 	#ifdef _DEBUG
 	printf("OnMultiHeartbeat callback in cgo.\n");
 	#endif
-	goOnMultiHeartbeat(CurrTime, MultiCastIP);
+	goOnMultiHeartbeat(client, CurrTime, MultiCastIP);
 }
 
-void cgoOnStopMultiTopic(int nTopicID) {
+void cgoOnStopMultiTopic(int client, int nTopicID) {
 	#ifdef _DEBUG
 	printf("OnStopMultiTopic callback in cgo.\n");
 	#endif
-	goOnStopMultiTopic(nTopicID);
+	goOnStopMultiTopic(client, nTopicID);
 }
 
-void cgoUDPMarketData(CQdamFtdcDepthMarketDataField *qmdata) {
+void cgoUDPMarketData(int client, CQdamFtdcDepthMarketDataField *qmdata) {
 	#ifdef _DEBUG
 	printf("UDPMarketData callback in cgo.\n");
 	#endif
-	goUDPMarketData(qmdata);
+	goUDPMarketData(client, qmdata);
 }
 
-void cgoOnRspError(CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspError(int client, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspError callback in cgo.\n");
 	#endif
-	goOnRspError(pRspInfo, nRequestID, bIsLast);
+	goOnRspError(client, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRspUserLogin(CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspUserLogin(int client, CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspUserLogin callback in cgo.\n");
 	#endif
-	goOnRspUserLogin(pRspUserLogin, pRspInfo, nRequestID, bIsLast);
+	goOnRspUserLogin(client, pRspUserLogin, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRspUserLogout(CQdamFtdcRspUserLogoutField *pRspUserLogout, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspUserLogout(int client, CQdamFtdcRspUserLogoutField *pRspUserLogout, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspUserLogout callback in cgo.\n");
 	#endif
-	goOnRspUserLogout(pRspUserLogout, pRspInfo, nRequestID, bIsLast);
+	goOnRspUserLogout(client, pRspUserLogout, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRtnDepthMarketData(CQdamFtdcDepthMarketDataField* pDepthMarketData) {
+void cgoOnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMarketData) {
 	#ifdef _DEBUG
 	printf("OnRtnDepthMarketData callback in cgo.\n");
 	#endif
-	goOnRtnDepthMarketData(pDepthMarketData);
+	goOnRtnDepthMarketData(client, pDepthMarketData);
 }
 
-void cgoOnRtnMultiDepthMarketData(CQdamFtdcDepthMarketDataField* pDepthMarketData) {
+void cgoOnRtnMultiDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMarketData) {
 	#ifdef _DEBUG
 	printf("OnRtnMultiDepthMarketData callback in cgo.\n");
 	#endif
-	goOnRtnMultiDepthMarketData(pDepthMarketData);
+	goOnRtnMultiDepthMarketData(client, pDepthMarketData);
 }
 
-void cgoOnRspSubMarketData(CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspSubMarketData(int client, CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspSubMarketData callback in cgo.\n");
 	#endif
-	goOnRspSubMarketData(pSpecificInstrument, pRspInfo, nRequestID, bIsLast);
+	goOnRspSubMarketData(client, pSpecificInstrument, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRspUnSubMarketData(CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspUnSubMarketData(int client, CQdamFtdcSpecificInstrumentField *pSpecificInstrument, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspUnSubMarketData callback in cgo.\n");
 	#endif
-	goOnRspUnSubMarketData(pSpecificInstrument, pRspInfo, nRequestID, bIsLast);
+	goOnRspUnSubMarketData(client, pSpecificInstrument, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRtnMBLMarketData(CQdamFtdcMBLMarketDataField *pMBLMarketData) {
+void cgoOnRtnMBLMarketData(int client, CQdamFtdcMBLMarketDataField *pMBLMarketData) {
 	#ifdef _DEBUG
 	printf("OnRtnMBLMarketData callback in cgo.\n");
 	#endif
-	goOnRtnMBLMarketData(pMBLMarketData);
+	goOnRtnMBLMarketData(client, pMBLMarketData);
 }
 
-void cgoOnRtnQmdInstrumentStatu(CQdamFtdcQmdInstrumentStateField *pQmdInstrumentState) {
+void cgoOnRtnQmdInstrumentStatu(int client, CQdamFtdcQmdInstrumentStateField *pQmdInstrumentState) {
 	#ifdef _DEBUG
 	printf("OnRtnQmdInstrumentStatu callback in cgo.\n");
 	#endif
-	goOnRtnQmdInstrumentStatu(pQmdInstrumentState);
+	goOnRtnQmdInstrumentStatu(client, pQmdInstrumentState);
 }
 
-void cgoOnRspSubscribeTopic(CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspSubscribeTopic(int client, CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspSubscribeTopic callback in cgo.\n");
 	#endif
-	goOnRspSubscribeTopic(pDissemination, pRspInfo, nRequestID, bIsLast);
+	goOnRspSubscribeTopic(client, pDissemination, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRspQryTopic(CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspQryTopic(int client, CQdamFtdcDisseminationField *pDissemination, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspQryTopic callback in cgo.\n");
 	#endif
-	goOnRspQryTopic(pDissemination, pRspInfo, nRequestID, bIsLast);
+	goOnRspQryTopic(client, pDissemination, pRspInfo, nRequestID, bIsLast);
 }
 
-void cgoOnRspQryMarketData(CQdamFtdcRspMarketDataField *pRspMarketData, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void cgoOnRspQryMarketData(int client, CQdamFtdcRspMarketDataField *pRspMarketData, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
 	#ifdef _DEBUG
 	printf("OnRspQryMarketData callback in cgo.\n");
 	#endif
-	goOnRspQryMarketData(pRspMarketData, pRspInfo, nRequestID, bIsLast);
+	goOnRspQryMarketData(client, pRspMarketData, pRspInfo, nRequestID, bIsLast);
 }

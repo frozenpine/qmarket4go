@@ -9,7 +9,7 @@
 
 int clientID = 0;
 
-void OnFrontConnected() {
+void OnFrontConnected(int client) {
     printf("Front connected.\n");
 
     CQdamFtdcReqUserLoginField user;
@@ -22,7 +22,7 @@ void OnFrontConnected() {
     ReqUserLogin(clientID, &user, 0);
 }
 
-void OnRspUserLogin(CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
+void OnRspUserLogin(int client, CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoField *pRspInfo, int nRequestID, bool bIsLast) {
     if (pRspInfo->ErrorID == 0) {
         printf("User[%s] login successfully: %s\n", pRspUserLogin->UserID, pRspInfo->ErrorMsg);
         
@@ -34,7 +34,7 @@ void OnRspUserLogin(CQdamFtdcRspUserLoginField *pRspUserLogin, CQdamFtdcRspInfoF
     }
 }
 
-void OnRtnDepthMarketData(CQdamFtdcDepthMarketDataField* pDepthMarketData) {
+void OnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMarketData) {
     printf("[%s.%s]: Ask[%f], Bid[%f], L[%f]\n", pDepthMarketData->ExchangeID, pDepthMarketData->InstrumentID, pDepthMarketData->AskPrice1, pDepthMarketData->BidPrice1, pDepthMarketData->LastPrice);
 }
 

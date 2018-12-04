@@ -287,144 +287,184 @@ type QMdAPI struct {
 	reqIDMutex sync.Mutex
 }
 
-var callback QMdAPICallback
+var callbacks map[int]QMdAPICallback
 
 //export goOnFrontConnected
-func goOnFrontConnected() {
-	if callback != nil {
+func goOnFrontConnected(client C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnFrontConnected()
 	}
 }
 
 //export goOnFrontDisconnected
-func goOnFrontDisconnected(nReason C.int) {
-	if callback != nil {
+func goOnFrontDisconnected(client C.int, nReason C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnFrontDisConnected(int(nReason))
 	}
 }
 
 //export goOnHeartBeatWarning
-func goOnHeartBeatWarning(nTimeLapse C.int) {
-	if callback != nil {
+func goOnHeartBeatWarning(client C.int, nTimeLapse C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnHeartBeatWarning(int(nTimeLapse))
 	}
 }
 
 //export goOnPackageStart
-func goOnPackageStart(nTopicID C.int, nSequenceNo C.int) {
-	if callback != nil {
+func goOnPackageStart(client C.int, nTopicID C.int, nSequenceNo C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnPackageStart(int(nTopicID), int(nSequenceNo))
 	}
 }
 
 //export goOnPackageEnd
-func goOnPackageEnd(nTopicID C.int, nSequenceNo C.int) {
-	if callback != nil {
+func goOnPackageEnd(client C.int, nTopicID C.int, nSequenceNo C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnPackageEnd(int(nTopicID), int(nSequenceNo))
 	}
 }
 
 //export goOnMultiHeartbeat
-func goOnMultiHeartbeat(CurrTime *C.char, MultiCastIP *C.char) {
-	if callback != nil {
+func goOnMultiHeartbeat(client C.int, CurrTime *C.char, MultiCastIP *C.char) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnMultiHeartbeat(C.GoString(CurrTime), C.GoString(MultiCastIP))
 	}
 }
 
 //export goOnStopMultiTopic
-func goOnStopMultiTopic(nTopicID C.int) {
-	if callback != nil {
+func goOnStopMultiTopic(client C.int, nTopicID C.int) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnStopMultiTopic(int(nTopicID))
 	}
 }
 
 //export goUDPMarketData
-func goUDPMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) {
-	if callback != nil {
+func goUDPMarketData(client C.int, qmdata *C.CQdamFtdcDepthMarketDataField) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.UDPMarketData(convertDepthMarketData(qmdata))
 	}
 }
 
 //export goOnRspError
-func goOnRspError(pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspError(client C.int, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspError(convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRspUserLogin
-func goOnRspUserLogin(pRspUserLogin *C.CQdamFtdcRspUserLoginField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspUserLogin(client C.int, pRspUserLogin *C.CQdamFtdcRspUserLoginField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspUserLogin(convertRspUserLogin(pRspUserLogin), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRspUserLogout
-func goOnRspUserLogout(pRspUserLogout *C.CQdamFtdcRspUserLogoutField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspUserLogout(client C.int, pRspUserLogout *C.CQdamFtdcRspUserLogoutField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspUserLogout(convertRspUserLogout(pRspUserLogout), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRtnDepthMarketData
-func goOnRtnDepthMarketData(pDepthMarketData *C.CQdamFtdcDepthMarketDataField) {
-	if callback != nil {
+func goOnRtnDepthMarketData(client C.int, pDepthMarketData *C.CQdamFtdcDepthMarketDataField) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRtnDepthMarketData(convertDepthMarketData(pDepthMarketData))
 	}
 }
 
 //export goOnRtnMultiDepthMarketData
-func goOnRtnMultiDepthMarketData(pDepthMarketData *C.CQdamFtdcDepthMarketDataField) {
-	if callback != nil {
+func goOnRtnMultiDepthMarketData(client C.int, pDepthMarketData *C.CQdamFtdcDepthMarketDataField) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRtnMultiDepthMarketData(convertDepthMarketData(pDepthMarketData))
 	}
 }
 
 //export goOnRspSubMarketData
-func goOnRspSubMarketData(pSpecificInstrument *C.CQdamFtdcSpecificInstrumentField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspSubMarketData(client C.int, pSpecificInstrument *C.CQdamFtdcSpecificInstrumentField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspSubMarketData(convertSpecificInstrument(pSpecificInstrument), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRspUnSubMarketData
-func goOnRspUnSubMarketData(pSpecificInstrument *C.CQdamFtdcSpecificInstrumentField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspUnSubMarketData(client C.int, pSpecificInstrument *C.CQdamFtdcSpecificInstrumentField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspUnSubMarketData(convertSpecificInstrument(pSpecificInstrument), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRtnMBLMarketData
-func goOnRtnMBLMarketData(pMBLMarketData *C.CQdamFtdcMBLMarketDataField) {
-	if callback != nil {
+func goOnRtnMBLMarketData(client C.int, pMBLMarketData *C.CQdamFtdcMBLMarketDataField) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRtnMBLMarketData(convertBLMarketData(pMBLMarketData))
 	}
 }
 
 //export goOnRtnQmdInstrumentStatu
-func goOnRtnQmdInstrumentStatu(pQmdInstrumentState *C.CQdamFtdcQmdInstrumentStateField) {
-	if callback != nil {
+func goOnRtnQmdInstrumentStatu(client C.int, pQmdInstrumentState *C.CQdamFtdcQmdInstrumentStateField) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRtnQmdInstrumentStatu(convertQmdInstrumentState(pQmdInstrumentState))
 	}
 }
 
 //export goOnRspSubscribeTopic
-func goOnRspSubscribeTopic(pDissemination *C.CQdamFtdcDisseminationField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspSubscribeTopic(client C.int, pDissemination *C.CQdamFtdcDisseminationField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspSubscribeTopic(convertDissemination(pDissemination), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRspQryTopic
-func goOnRspQryTopic(pDissemination *C.CQdamFtdcDisseminationField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspQryTopic(client C.int, pDissemination *C.CQdamFtdcDisseminationField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspQryTopic(convertDissemination(pDissemination), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
 
 //export goOnRspQryMarketData
-func goOnRspQryMarketData(pRspMarketData *C.CQdamFtdcRspMarketDataField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
-	if callback != nil {
+func goOnRspQryMarketData(client C.int, pRspMarketData *C.CQdamFtdcRspMarketDataField, pRspInfo *C.CQdamFtdcRspInfoField, nRequestID C.int, bIsLast C.bool) {
+	callback, exist := callbacks[int(client)]
+
+	if exist {
 		callback.OnRspQryMarketData(convertRspMarketData(pRspMarketData), convertRspInfo(pRspInfo), int(nRequestID), bool(bIsLast))
 	}
 }
@@ -457,7 +497,11 @@ func (api *QMdAPI) RegisterCallback(cb QMdAPICallback) {
 		panic("Please call function InitApi first.")
 	}
 
-	callback = cb
+	if callbacks == nil {
+		callbacks = make(map[int]QMdAPICallback)
+	}
+
+	callbacks[api.clientID] = cb
 
 	C.SetCallbackFunOnFrontConnected(C.int(api.clientID), (C.FunOnFrontConnected)(unsafe.Pointer(C.cgoOnFrontConnected)))
 	C.SetCallbackFunOnFrontDisconnected(C.int(api.clientID), (C.FunOnFrontDisconnected)(unsafe.Pointer(C.cgoOnFrontDisconnected)))

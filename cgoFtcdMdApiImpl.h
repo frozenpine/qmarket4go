@@ -9,66 +9,66 @@ function name with prefix "cgo" used to be registered for C callback & passthrou
 function name with prefix "go" defined in go code file and transform C callback data structure to go structure;
 */
 
-void cgoOnFrontConnected();
-extern void goOnFrontConnected();
+void cgoOnFrontConnected(int);
+extern void goOnFrontConnected(int);
 
-void cgoOnFrontDisconnected(int);
-extern void goOnFrontDisconnected(int);
+void cgoOnFrontDisconnected(int, int);
+extern void goOnFrontDisconnected(int, int);
 
-void cgoOnHeartBeatWarning(int);
-extern void goOnHeartBeatWarning(int);
+void cgoOnHeartBeatWarning(int, int);
+extern void goOnHeartBeatWarning(int, int);
 
-void cgoOnPackageStart(int, int);
-extern void goOnPackageStart(int, int);
+void cgoOnPackageStart(int, int, int);
+extern void goOnPackageStart(int, int, int);
 
-void cgoOnPackageEnd(int, int);
-extern void goOnPackageEnd(int, int);
+void cgoOnPackageEnd(int, int, int);
+extern void goOnPackageEnd(int, int, int);
 
-void cgoOnMultiHeartbeat(char *, char *);
-extern void goOnMultiHeartbeat(char *, char *);
+void cgoOnMultiHeartbeat(int, char *, char *);
+extern void goOnMultiHeartbeat(int, char *, char *);
 
-void cgoOnStopMultiTopic(int);
-extern void goOnStopMultiTopic(int);
+void cgoOnStopMultiTopic(int, int);
+extern void goOnStopMultiTopic(int, int);
 
-void cgoUDPMarketData(CQdamFtdcDepthMarketDataField*);
-extern void goUDPMarketData(CQdamFtdcDepthMarketDataField *);
+void cgoUDPMarketData(int, CQdamFtdcDepthMarketDataField*);
+extern void goUDPMarketData(int, CQdamFtdcDepthMarketDataField *);
 
-void cgoOnRspError(CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspError(CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspError(int, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspError(int, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspUserLogin(CQdamFtdcRspUserLoginField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspUserLogin(CQdamFtdcRspUserLoginField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspUserLogin(int, CQdamFtdcRspUserLoginField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspUserLogin(int, CQdamFtdcRspUserLoginField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspUserLogout(CQdamFtdcRspUserLogoutField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspUserLogout(CQdamFtdcRspUserLogoutField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspUserLogout(int, CQdamFtdcRspUserLogoutField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspUserLogout(int, CQdamFtdcRspUserLogoutField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRtnDepthMarketData(CQdamFtdcDepthMarketDataField*);
-extern void goOnRtnDepthMarketData(CQdamFtdcDepthMarketDataField*);
+void cgoOnRtnDepthMarketData(int, CQdamFtdcDepthMarketDataField*);
+extern void goOnRtnDepthMarketData(int, CQdamFtdcDepthMarketDataField*);
 
-void cgoOnRtnMultiDepthMarketData(CQdamFtdcDepthMarketDataField*);
-extern void goOnRtnMultiDepthMarketData(CQdamFtdcDepthMarketDataField*);
+void cgoOnRtnMultiDepthMarketData(int, CQdamFtdcDepthMarketDataField*);
+extern void goOnRtnMultiDepthMarketData(int, CQdamFtdcDepthMarketDataField*);
 
-void cgoOnRspSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspUnSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspUnSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspUnSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspUnSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspUnSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspUnSubMarketData(CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspUnSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspUnSubMarketData(int, CQdamFtdcSpecificInstrumentField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRtnMBLMarketData(CQdamFtdcMBLMarketDataField*);
-extern void goOnRtnMBLMarketData(CQdamFtdcMBLMarketDataField*);
+void cgoOnRtnMBLMarketData(int, CQdamFtdcMBLMarketDataField*);
+extern void goOnRtnMBLMarketData(int, CQdamFtdcMBLMarketDataField*);
 
-void cgoOnRtnQmdInstrumentStatu(CQdamFtdcQmdInstrumentStateField*);
-extern void goOnRtnQmdInstrumentStatu(CQdamFtdcQmdInstrumentStateField*);
+void cgoOnRtnQmdInstrumentStatu(int, CQdamFtdcQmdInstrumentStateField*);
+extern void goOnRtnQmdInstrumentStatu(int, CQdamFtdcQmdInstrumentStateField*);
 
-void cgoOnRspSubscribeTopic(CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspSubscribeTopic(CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspSubscribeTopic(int, CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspSubscribeTopic(int, CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspQryTopic(CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspQryTopic(CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspQryTopic(int, CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspQryTopic(int, CQdamFtdcDisseminationField*, CQdamFtdcRspInfoField*, int, bool);
 
-void cgoOnRspQryMarketData(CQdamFtdcRspMarketDataField*, CQdamFtdcRspInfoField*, int, bool);
-extern void goOnRspQryMarketData(CQdamFtdcRspMarketDataField*, CQdamFtdcRspInfoField*, int, bool);
+void cgoOnRspQryMarketData(int, CQdamFtdcRspMarketDataField*, CQdamFtdcRspInfoField*, int, bool);
+extern void goOnRspQryMarketData(int, CQdamFtdcRspMarketDataField*, CQdamFtdcRspInfoField*, int, bool);
 #endif
