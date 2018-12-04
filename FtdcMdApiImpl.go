@@ -649,7 +649,7 @@ func (api *QMdAPI) OnStopMultiTopic(topicID int) {}
 
 // UDPMarketData UDP行情通知
 func (api *QMdAPI) UDPMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRspError 错误应答消息
@@ -676,12 +676,12 @@ func (api *QMdAPI) OnRspUserLogout(rsp *GoQdamFtdcRspUserLogoutField, err *GoQda
 
 // OnRtnDepthMarketData 深度行情通知
 func (api *QMdAPI) OnRtnDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s.%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRtnMultiDepthMarketData 多播行情通知
 func (api *QMdAPI) OnRtnMultiDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s.%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRspSubMarketData 行情订阅应答

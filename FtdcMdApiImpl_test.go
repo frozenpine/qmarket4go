@@ -29,12 +29,12 @@ func (md *myAPI) OnRspUserLogin(rsp *GoQdamFtdcRspUserLoginField, err *GoQdamFtd
 func TestMdApi(t *testing.T) {
 	api := myAPI{}
 
+	defer api.Release()
+
 	api.InitAPI("./flow/")
 	api.RegisterCallback(&api)
 	api.RegisterFront("tcp://122.144.129.233:30027")
 	api.Init()
 
-	for i := 0; i < 10; i++ {
-		time.Sleep(1 * 1000 * 1000 * 1000)
-	}
+	time.Sleep(20 * 1000 * 1000 * 1000)
 }
