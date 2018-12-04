@@ -67,9 +67,9 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 	data.OpenInterest = float64(qmdata.OpenInterest)
 	data.InstrumentID = C.GoString(&qmdata.InstrumentID[0])
 
-	now := time.Now()
-	updateTime, _ := time.Parse("2006-01-02 03:04:05", fmt.Sprintf("%d-%d-%d %s", now.Year(), now.Month(), now.Day(), C.GoString(&qmdata.UpdateTime[0])))
-	data.UpdateTime = time.Unix(updateTime.Unix(), int64(int(qmdata.UpdateMillisec)*1000000))
+	timeString := fmt.Sprintf("%s %s.%03d", time.Now().Format("2006-01-02"), C.GoString(&qmdata.UpdateTime[0]), qmdata.UpdateMillisec)
+	updateTime, _ := time.Parse("2006-01-02 15:04:05.000", timeString)
+	data.UpdateTime = updateTime
 
 	data.ExchangeID = C.GoString(&qmdata.ExchangeID[0])
 	data.VolumeAskLot = int(qmdata.VolumeAskLot)
@@ -213,9 +213,9 @@ func convertBLMarketData(pMBLMarketData *C.CQdamFtdcMBLMarketDataField) *GoQdamF
 	data.Price = float64(pMBLMarketData.Price)
 	data.Volume = int(pMBLMarketData.Volume)
 
-	now := time.Now()
-	updateTime, _ := time.Parse("2006-01-02 03:04:05", fmt.Sprintf("%d-%d-%d %s", now.Year(), now.Month(), now.Day(), C.GoString(&pMBLMarketData.UpdateTime[0])))
-	data.UpdateTime = time.Unix(updateTime.Unix(), int64(int(pMBLMarketData.UpdateMillisec)*1000000))
+	timeString := fmt.Sprintf("%s %s.%03d", time.Now().Format("2006-01-02"), C.GoString(&pMBLMarketData.UpdateTime[0]), pMBLMarketData.UpdateMillisec)
+	updateTime, _ := time.Parse("2006-01-02 15:04:05.000", timeString)
+	data.UpdateTime = updateTime
 
 	return &data
 }
@@ -268,9 +268,9 @@ func convertRspMarketData(pRspMarketData *C.CQdamFtdcRspMarketDataField) *GoQdam
 	data.AskVolume = int(pRspMarketData.AskVolume1)
 	data.InstrumentID = C.GoString(&pRspMarketData.InstrumentID[0])
 
-	now := time.Now()
-	updateTime, _ := time.Parse("2006-01-02 03:04:05", fmt.Sprintf("%d-%d-%d %s", now.Year(), now.Month(), now.Day(), C.GoString(&pRspMarketData.UpdateTime[0])))
-	data.UpdateTime = time.Unix(updateTime.Unix(), int64(int(pRspMarketData.UpdateMillisec)*1000000))
+	timeString := fmt.Sprintf("%s %s.%03d", time.Now().Format("2006-01-02"), C.GoString(&pRspMarketData.UpdateTime[0]), pRspMarketData.UpdateMillisec)
+	updateTime, _ := time.Parse("2006-01-02 15:04:05.000", timeString)
+	data.UpdateTime = updateTime
 
 	return &data
 }
@@ -649,7 +649,7 @@ func (api *QMdAPI) OnStopMultiTopic(topicID int) {}
 
 // UDPMarketData UDP行情通知
 func (api *QMdAPI) UDPMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
 }
 
 // OnRspError 错误应答消息
@@ -676,12 +676,12 @@ func (api *QMdAPI) OnRspUserLogout(rsp *GoQdamFtdcRspUserLogoutField, err *GoQda
 
 // OnRtnDepthMarketData 深度行情通知
 func (api *QMdAPI) OnRtnDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s.%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[%s.%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
 }
 
 // OnRtnMultiDepthMarketData 多播行情通知
 func (api *QMdAPI) OnRtnMultiDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s.%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[%s.%s] %s: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
 }
 
 // OnRspSubMarketData 行情订阅应答
