@@ -13,7 +13,17 @@ const (
 	Sell
 )
 
-// InsStatus 合约状态
+func (d direction) ToString() string {
+	switch d {
+	case Buy:
+		return "买"
+	case Sell:
+		return "卖"
+	}
+
+	return ""
+}
+
 type insStatus int
 
 const (
@@ -78,7 +88,7 @@ type GoQdamFtdcDepthMarketDataField struct {
 	InstrumentID       string
 	UpdateTime         time.Time
 	ExchangeID         string
-	InstrumentStatus   byte
+	InstrumentStatus   insStatus
 }
 
 // GoQdamFtdcRspUserLoginField 用户登录应答

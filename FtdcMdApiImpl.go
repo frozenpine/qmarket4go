@@ -74,7 +74,9 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 	data.ExchangeID = C.GoString(&qmdata.ExchangeID[0])
 	data.VolumeAskLot = int(qmdata.VolumeAskLot)
 	data.VolumeBidLot = int(qmdata.VolumeBidLot)
-	data.InstrumentStatus = byte(qmdata.InstrumentStatus)
+
+	status, _ := strconv.ParseInt(C.GoString(&qmdata.InstrumentStatus), 10, 32)
+	data.InstrumentStatus = insStatus(status)
 
 	{
 		if qmdata.AskVolume1 != 0 {

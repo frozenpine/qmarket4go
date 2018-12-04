@@ -34,7 +34,7 @@ func TestMdApi(t *testing.T) {
 	api.RegisterFront("tcp://122.144.129.233:30027")
 	api.Init()
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 10; i++ {
 		time.Sleep(1 * 1000 * 1000 * 1000)
 	}
 }
