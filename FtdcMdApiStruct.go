@@ -4,6 +4,43 @@ import (
 	"time"
 )
 
+type direction int
+
+const (
+	// Buy 买方向
+	Buy direction = iota
+	// Sell 卖方向
+	Sell
+)
+
+// InsStatus 合约状态
+type insStatus int
+
+const (
+	// BeforeTrading 开盘前
+	BeforeTrading insStatus = iota
+	// NoTrading 非交易
+	NoTrading
+	// Continous 连续交易
+	Continous
+	// AuctionOrdering 集合竞价报价
+	AuctionOrdering
+	// AuctionBalance 集合竞价平衡
+	AuctionBalance
+	// AuctionMatch 集合竞价撮合
+	AuctionMatch
+	// Closed 收盘
+	Closed
+	// SGEDeryApp 金交所交割申报
+	SGEDeryApp
+	// SGEDeryMatch 金交所交割申报撮合
+	SGEDeryMatch
+	// SGEMidApp 金交所中立仓申报
+	SGEMidApp
+	// SGEMidMatch 金交所中立仓申报撮合
+	SGEMidMatch
+)
+
 type priceItem struct {
 	Price  float64
 	Volume int
@@ -74,7 +111,7 @@ type GoQdamFtdcSpecificInstrumentField struct {
 // GoQdamFtdcMBLMarketDataField 分价行情
 type GoQdamFtdcMBLMarketDataField struct {
 	InstrumentID string
-	Direction    byte
+	Direction    direction
 	Price        float64
 	Volume       int
 	UpdateTime   time.Time
@@ -84,7 +121,7 @@ type GoQdamFtdcMBLMarketDataField struct {
 type GoQdamFtdcQmdInstrumentStateField struct {
 	ExchangeID       string
 	InstrumentID     string
-	InstrumentStatus byte
+	InstrumentStatus insStatus
 }
 
 // GoQdamFtdcDisseminationField 信息分发

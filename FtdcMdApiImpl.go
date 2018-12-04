@@ -145,7 +145,13 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 func convertRspInfo(pRspInfo *C.CQdamFtdcRspInfoField) *GoQdamFtdcRspInfoField {
 	data := GoQdamFtdcRspInfoField{}
 
-	data.ErrorID = int(pRspInfo.ErrorID)
+	if pRspInfo == nil {
+		return &data
+	}
+
+	if pRspInfo.ErrorID != 0 {
+		data.ErrorID = int(pRspInfo.ErrorID)
+	}
 	msg, _ := iconv.ConvertString(C.GoString(&pRspInfo.ErrorMsg[0]), "gbk", "utf-8")
 	data.ErrorMsg = msg
 
@@ -188,11 +194,25 @@ func convertRspUserLogout(pRspUserLogout *C.CQdamFtdcRspUserLogoutField) *GoQdam
 func convertSpecificInstrument(pSpecificInstrument *C.CQdamFtdcSpecificInstrumentField) *GoQdamFtdcSpecificInstrumentField {
 	data := GoQdamFtdcSpecificInstrumentField{}
 
+	data.InstrumentID = C.GoString(&pSpecificInstrument.InstrumentID[0])
+
 	return &data
 }
 
 func convertBLMarketData(pMBLMarketData *C.CQdamFtdcMBLMarketDataField) *GoQdamFtdcMBLMarketDataField {
 	data := GoQdamFtdcMBLMarketDataField{}
+
+	data.InstrumentID = C.GoString(&pMBLMarketData.InstrumentID[0])
+
+	d, _ := strconv.ParseInt(C.GoString(&pMBLMarketData.Direction), 10, 32)
+	data.Direction = direction(d)
+
+	data.Price = float64(pMBLMarketData.Price)
+	data.Volume = int(pMBLMarketData.Volume)
+
+	now := time.Now()
+	updateTime, _ := time.Parse("2006-01-02 03:04:05", fmt.Sprintf("%d-%d-%d %s", now.Year(), now.Month(), now.Day(), C.GoString(&pMBLMarketData.UpdateTime[0])))
+	data.UpdateTime = time.Unix(updateTime.Unix(), int64(int(pMBLMarketData.UpdateMillisec)*1000000))
 
 	return &data
 }
@@ -200,17 +220,54 @@ func convertBLMarketData(pMBLMarketData *C.CQdamFtdcMBLMarketDataField) *GoQdamF
 func convertQmdInstrumentState(pQmdInstrumentState *C.CQdamFtdcQmdInstrumentStateField) *GoQdamFtdcQmdInstrumentStateField {
 	data := GoQdamFtdcQmdInstrumentStateField{}
 
+	data.ExchangeID = C.GoString(&pQmdInstrumentState.ExchangeID[0])
+	data.InstrumentID = C.GoString(&pQmdInstrumentState.InstrumentID[0])
+
+	status, _ := strconv.ParseInt(C.GoString(&pQmdInstrumentState.InstrumentStatus), 10, 32)
+	data.InstrumentStatus = insStatus(status)
+
 	return &data
 }
 
 func convertDissemination(pDissemination *C.CQdamFtdcDisseminationField) *GoQdamFtdcDisseminationField {
 	data := GoQdamFtdcDisseminationField{}
 
+	data.SequenceNo = int(pDissemination.SequenceNo)
+	data.SequenceSeries = int(pDissemination.SequenceSeries)
+
 	return &data
 }
 
 func convertRspMarketData(pRspMarketData *C.CQdamFtdcRspMarketDataField) *GoQdamFtdcRspMarketDataField {
 	data := GoQdamFtdcRspMarketDataField{}
+
+	data.ExchangeID = C.GoString(&pRspMarketData.ExchangeID[0])
+	data.TradingDay = C.GoString(&pRspMarketData.TradingDay[0])
+	data.PreSettlementPrice = float64(pRspMarketData.PreSettlementPrice)
+	data.PreClosePrice = float64(pRspMarketData.PreClosePrice)
+	data.PreOpenInterest = float64(pRspMarketData.PreOpenInterest)
+	data.PreDelta = float64(pRspMarketData.PreDelta)
+	data.OpenPrice = float64(pRspMarketData.OpenPrice)
+	data.HighestPrice = float64(pRspMarketData.HighestPrice)
+	data.LowestPrice = float64(pRspMarketData.LowestPrice)
+	data.ClosePrice = float64(pRspMarketData.ClosePrice)
+	data.UpperLimitPrice = float64(pRspMarketData.UpperLimitPrice)
+	data.LowerLimitPrice = float64(pRspMarketData.LowerLimitPrice)
+	data.SettlementPrice = float64(pRspMarketData.SettlementPrice)
+	data.CurrDelta = float64(pRspMarketData.CurrDelta)
+	data.LastPrice = float64(pRspMarketData.LastPrice)
+	data.Volume = int(pRspMarketData.Volume)
+	data.Turnover = float64(pRspMarketData.Turnover)
+	data.OpenInterest = float64(pRspMarketData.OpenInterest)
+	data.BidPrice = float64(pRspMarketData.BidPrice1)
+	data.BidVolume = int(pRspMarketData.BidVolume1)
+	data.AskPrice = float64(pRspMarketData.AskPrice1)
+	data.AskVolume = int(pRspMarketData.AskVolume1)
+	data.InstrumentID = C.GoString(&pRspMarketData.InstrumentID[0])
+
+	now := time.Now()
+	updateTime, _ := time.Parse("2006-01-02 03:04:05", fmt.Sprintf("%d-%d-%d %s", now.Year(), now.Month(), now.Day(), C.GoString(&pRspMarketData.UpdateTime[0])))
+	data.UpdateTime = time.Unix(updateTime.Unix(), int64(int(pRspMarketData.UpdateMillisec)*1000000))
 
 	return &data
 }
@@ -538,7 +595,7 @@ func (api *QMdAPI) OnRspError(err *GoQdamFtdcRspInfoField, reqID int, isLast boo
 // OnRspUserLogin 用户登录消息
 func (api *QMdAPI) OnRspUserLogin(rsp *GoQdamFtdcRspUserLoginField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
-		log.Fatalf("User[%s] login failed: %s\n", rsp.UserID, err.ErrorMsg)
+		log.Printf("User[%s] login failed: %s\n", rsp.UserID, err.ErrorMsg)
 	} else {
 		api.Logged = true
 		log.Printf("User[%s] login success\n", rsp.UserID)
@@ -556,18 +613,18 @@ func (api *QMdAPI) OnRspUserLogout(rsp *GoQdamFtdcRspUserLogoutField, err *GoQda
 
 // OnRtnDepthMarketData 深度行情通知
 func (api *QMdAPI) OnRtnDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[%s.%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
 }
 
 // OnRtnMultiDepthMarketData 多播行情通知
 func (api *QMdAPI) OnRtnMultiDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
+	log.Printf("[%s.%s] %X: Ask[%f], Bid[%f], Last[%f]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.InstrumentStatus, rtn.Asks[0].Price, rtn.Bids[0].Price, rtn.LastPrice)
 }
 
 // OnRspSubMarketData 行情订阅应答
 func (api *QMdAPI) OnRspSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
-		log.Fatalf("[%s] subscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
+		log.Printf("[%s] subscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
 	} else {
 		log.Printf("[%s] subscribed successfully\n", rsp.InstrumentID)
 	}
@@ -576,7 +633,7 @@ func (api *QMdAPI) OnRspSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, er
 // OnRspUnSubMarketData 行情退订应答
 func (api *QMdAPI) OnRspUnSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
-		log.Fatalf("[%s] unsubscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
+		log.Printf("[%s] unsubscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
 	} else {
 		log.Printf("[%s] unsubscribed successfully\n", rsp.InstrumentID)
 	}
