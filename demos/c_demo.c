@@ -7,6 +7,12 @@
 
 #include "FtdcMdApiImpl.h"
 
+#ifdef WIN32
+#define MKDIR(path) {mkdir(path);}
+#else
+#define MKDIR(path) {mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);}
+#endif 
+
 int clientID = 0;
 
 void OnFrontConnected(int client) {
@@ -39,7 +45,7 @@ void OnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMarke
 }
 
 int main() {
-    mkdir("flow");
+    MKDIR("flow");
     
     clientID = InitApi("./flow/");
 
