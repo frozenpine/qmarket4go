@@ -29,7 +29,9 @@ func (md *myAPI) OnFrontConnected() {
 func (md *myAPI) OnRspUserLogin(rsp *GoQdamFtdcRspUserLoginField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	md.QMdAPI.OnRspUserLogin(rsp, err, reqID, isLast)
 
-	md.SubMarketData("fu1901", "rb1901", "CL1901")
+	if err.ErrorID == 0 {
+		md.SubMarketData("fu1901", "rb1901", "CL1901")
+	}
 }
 
 func (md *myAPI) OnRtnDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
