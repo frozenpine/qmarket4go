@@ -1,6 +1,7 @@
 #ifdef _DEBUG
 #include <stdio.h>
 #endif
+#include <string.h>
 #include "cgoFtcdMdApiImpl.h"
 
 void cgoOnFrontConnected(int client) {
@@ -56,6 +57,11 @@ void cgoUDPMarketData(int client, CQdamFtdcDepthMarketDataField *qmdata) {
 	#ifdef _DEBUG
 	printf("UDPMarketData callback in cgo.\n");
 	#endif
+
+	if (strcmp(qmdata->ExchangeID, "") == 0 || strcmp(qmdata->TradingDay, "") == 0) {
+		return;
+	}
+
 	goUDPMarketData(client, qmdata);
 }
 
@@ -84,6 +90,11 @@ void cgoOnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMa
 	#ifdef _DEBUG
 	printf("OnRtnDepthMarketData callback in cgo.\n");
 	#endif
+
+	if (strcmp(pDepthMarketData->ExchangeID, "") == 0 || strcmp(pDepthMarketData->TradingDay, "") == 0) {
+		return;
+	}
+	
 	goOnRtnDepthMarketData(client, pDepthMarketData);
 }
 
@@ -91,6 +102,11 @@ void cgoOnRtnMultiDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDe
 	#ifdef _DEBUG
 	printf("OnRtnMultiDepthMarketData callback in cgo.\n");
 	#endif
+
+	if (strcmp(pDepthMarketData->ExchangeID, "") == 0 || strcmp(pDepthMarketData->TradingDay, "") == 0) {
+		return;
+	}
+
 	goOnRtnMultiDepthMarketData(client, pDepthMarketData);
 }
 
