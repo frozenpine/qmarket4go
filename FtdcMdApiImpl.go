@@ -15,7 +15,7 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"sync"
+	"sync/atomic"
 	"time"
 	"unsafe"
 
@@ -48,6 +48,7 @@ type QMdAPICallback interface {
 
 func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdcDepthMarketDataField {
 	data := GoQdamFtdcDepthMarketDataField{}
+
 	data.TradingDay = C.GoString(&qmdata.TradingDay[0])
 	data.PreSettlementPrice = float64(qmdata.PreSettlementPrice)
 	data.PreClosePrice = float64(qmdata.PreClosePrice)
@@ -277,14 +278,13 @@ func convertRspMarketData(pRspMarketData *C.CQdamFtdcRspMarketDataField) *GoQdam
 
 // QMdAPI 行情API数据封装
 type QMdAPI struct {
-	clientID   int
-	FrontAddr  string
-	FensAddr   string
-	Connected  bool
-	UserInfo   GoQdamFtdcReqUserLoginField
-	Logged     bool
-	reqID      int64
-	reqIDMutex sync.Mutex
+	clientID  int
+	FrontAddr string
+	FensAddr  string
+	Connected bool
+	UserInfo  GoQdamFtdcReqUserLoginField
+	Logged    bool
+	reqID     int64
 }
 
 var callbacks map[int]QMdAPICallback
@@ -559,14 +559,8 @@ func (api *QMdAPI) Release() {
 	C.Release(C.int(api.clientID))
 }
 
-func (api *QMdAPI) nextReqID() int64 {
-	api.reqIDMutex.Lock()
-	defer api.reqIDMutex.Unlock()
-
-	currReqID := api.reqID
-	api.reqID++
-
-	return currReqID
+func (api *QMdAPI) getReqID() int64 {
+	return atomic.AddInt64(&api.reqID, 1)
 }
 
 // Login 用户登录请求
@@ -584,7 +578,7 @@ func (api *QMdAPI) Login(login *GoQdamFtdcReqUserLoginField) int {
 	cPassword := C.CString(login.Password)
 	C.strncpy(&loginReq.Password[0], cPassword, C.sizeof_TQdamFtdcPasswordType-1)
 
-	rtn := C.ReqUserLogin(C.int(api.clientID), &loginReq, C.int(api.nextReqID()))
+	rtn := C.ReqUserLogin(C.int(api.clientID), &loginReq, C.int(api.getReqID()))
 
 	return int(rtn)
 }
@@ -649,7 +643,21 @@ func (api *QMdAPI) OnStopMultiTopic(topicID int) {}
 
 // UDPMarketData UDP行情通知
 func (api *QMdAPI) UDPMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
+	var ask, bid string
+
+	if len(rtn.Asks) > 0 {
+		ask = fmt.Sprintf("Ask[%f@%d]", rtn.Asks[0].Price, rtn.Asks[0].Volume)
+	} else {
+		ask = "Ask[]"
+	}
+
+	if len(rtn.Bids) > 0 {
+		bid = fmt.Sprintf("Bid[%f@%d]", rtn.Bids[0].Price, rtn.Bids[0].Volume)
+	} else {
+		bid = "Bid[]"
+	}
+
+	log.Printf("[%5s.%-6s] %s: %s, %s, Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), ask, bid, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRspError 错误应答消息
@@ -676,12 +684,40 @@ func (api *QMdAPI) OnRspUserLogout(rsp *GoQdamFtdcRspUserLogoutField, err *GoQda
 
 // OnRtnDepthMarketData 深度行情通知
 func (api *QMdAPI) OnRtnDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
+	var ask, bid string
+
+	if len(rtn.Asks) > 0 {
+		ask = fmt.Sprintf("Ask[%f@%d]", rtn.Asks[0].Price, rtn.Asks[0].Volume)
+	} else {
+		ask = "Ask[]"
+	}
+
+	if len(rtn.Bids) > 0 {
+		bid = fmt.Sprintf("Bid[%f@%d]", rtn.Bids[0].Price, rtn.Bids[0].Volume)
+	} else {
+		bid = "Bid[]"
+	}
+
+	log.Printf("[%5s.%-6s] %s: %s, %s, Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), ask, bid, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRtnMultiDepthMarketData 多播行情通知
 func (api *QMdAPI) OnRtnMultiDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField) {
-	log.Printf("[% 5s.% 6s] %s: Ask[%f@%d], Bid[%f@%d], Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), rtn.Asks[0].Price, rtn.Asks[0].Volume, rtn.Bids[0].Price, rtn.Bids[0].Volume, rtn.LastPrice, rtn.Volume)
+	var ask, bid string
+
+	if len(rtn.Asks) > 0 {
+		ask = fmt.Sprintf("Ask[%f@%d]", rtn.Asks[0].Price, rtn.Asks[0].Volume)
+	} else {
+		ask = "Ask[]"
+	}
+
+	if len(rtn.Bids) > 0 {
+		bid = fmt.Sprintf("Bid[%f@%d]", rtn.Bids[0].Price, rtn.Bids[0].Volume)
+	} else {
+		bid = "Bid[]"
+	}
+
+	log.Printf("[%5s.%-6s] %s: %s, %s, Last[%f@%d]\n", rtn.ExchangeID, rtn.InstrumentID, rtn.UpdateTime.Format("15:04:05.000"), ask, bid, rtn.LastPrice, rtn.Volume)
 }
 
 // OnRspSubMarketData 行情订阅应答
