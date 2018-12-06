@@ -724,8 +724,6 @@ func (api *QMdAPI) OnRtnMultiDepthMarketData(rtn *GoQdamFtdcDepthMarketDataField
 func (api *QMdAPI) OnRspSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
 		log.Printf("[%s] subscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
-	} else {
-		log.Printf("[%s] subscribed successfully\n", rsp.InstrumentID)
 	}
 }
 
@@ -733,8 +731,6 @@ func (api *QMdAPI) OnRspSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, er
 func (api *QMdAPI) OnRspUnSubMarketData(rsp *GoQdamFtdcSpecificInstrumentField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
 		log.Printf("[%s] unsubscribe failed: %s\n", rsp.InstrumentID, err.ErrorMsg)
-	} else {
-		log.Printf("[%s] unsubscribed successfully\n", rsp.InstrumentID)
 	}
 }
 
@@ -752,25 +748,19 @@ func (api *QMdAPI) OnRtnQmdInstrumentStatu(rtn *GoQdamFtdcQmdInstrumentStateFiel
 func (api *QMdAPI) OnRspSubscribeTopic(rsp *GoQdamFtdcDisseminationField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
 	if err.ErrorID != 0 {
 		log.Fatalf("Topic[%d] subscribe failed: %s\n", rsp.SequenceSeries, err.ErrorMsg)
-	} else {
-		log.Printf("Topic[%d] subscribed successfully\n", rsp.SequenceSeries)
 	}
 }
 
 // OnRspQryTopic 主题查询应答
 func (api *QMdAPI) OnRspQryTopic(rsp *GoQdamFtdcDisseminationField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
-	if err.ErrorID != 0 {
-		log.Fatalf("Query topic failed: %s\n", err.ErrorMsg)
-	} else {
+	if err.ErrorID == 0 {
 		log.Printf("Available topic: %d\n", rsp.SequenceSeries)
 	}
 }
 
 // OnRspQryMarketData 行情查询应答
 func (api *QMdAPI) OnRspQryMarketData(rsp *GoQdamFtdcRspMarketDataField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
-	if err.ErrorID != 0 {
-		log.Fatalf("Query marketdata failed: %s", err.ErrorMsg)
-	} else {
+	if err.ErrorID == 0 {
 		log.Printf("Available instrument: %s", rsp.InstrumentID)
 	}
 }
