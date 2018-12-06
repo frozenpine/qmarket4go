@@ -10,6 +10,8 @@
 #ifndef QDAM_FTDCDATATYPE_H
 #define QDAM_FTDCDATATYPE_H
 
+#include <float.h>
+
 typedef enum
 {
 	QDAM_TERT_RESTART = 0,

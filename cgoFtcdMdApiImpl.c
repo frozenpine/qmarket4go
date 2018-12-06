@@ -1,8 +1,27 @@
-#ifdef _DEBUG
 #include <stdio.h>
-#endif
 #include <string.h>
 #include "cgoFtcdMdApiImpl.h"
+
+char* strnlast(char *origin, int n) {
+	int len = strlen(origin);
+	if (n > len) {
+		n = len;
+	}
+
+	return &origin[len - n];
+}
+
+bool insFilter(CQdamFtdcDepthMarketDataField *data) {
+	if (strcmp(data->ExchangeID, "") == 0 || strcmp(data->TradingDay, "") == 0) {
+		return true;
+	}
+
+	if ((strcmp(data->ExchangeID, "SHFE") == 0 || strcmp(data->ExchangeID, "INE") == 0) && strcmp(strnlast(data->InstrumentID, 3), "efp") == 0) {
+		return true;
+	}
+
+	return false;
+}
 
 void cgoOnFrontConnected(int client) {
 	#ifdef _DEBUG
@@ -58,7 +77,7 @@ void cgoUDPMarketData(int client, CQdamFtdcDepthMarketDataField *qmdata) {
 	printf("UDPMarketData callback in cgo.\n");
 	#endif
 
-	if (strcmp(qmdata->ExchangeID, "") == 0 || strcmp(qmdata->TradingDay, "") == 0) {
+	if (insFilter(qmdata)) {
 		return;
 	}
 
@@ -91,9 +110,11 @@ void cgoOnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMa
 	printf("OnRtnDepthMarketData callback in cgo.\n");
 	#endif
 
-	if (strcmp(pDepthMarketData->ExchangeID, "") == 0 || strcmp(pDepthMarketData->TradingDay, "") == 0) {
+	if (insFilter(pDepthMarketData)) {
 		return;
 	}
+
+	printf("O[%f], A[%d@%f], B[%d@%f], L[%d@%f]\n", pDepthMarketData->OpenPrice, pDepthMarketData->AskVolume1, pDepthMarketData->AskPrice1, pDepthMarketData->BidVolume1, pDepthMarketData->BidPrice1, pDepthMarketData->Volume, pDepthMarketData->LastPrice);
 	
 	goOnRtnDepthMarketData(client, pDepthMarketData);
 }
@@ -103,7 +124,7 @@ void cgoOnRtnMultiDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDe
 	printf("OnRtnMultiDepthMarketData callback in cgo.\n");
 	#endif
 
-	if (strcmp(pDepthMarketData->ExchangeID, "") == 0 || strcmp(pDepthMarketData->TradingDay, "") == 0) {
+	if (insFilter(pDepthMarketData)) {
 		return;
 	}
 
