@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+
 #include "cgoFtcdMdApiImpl.h"
 
 char* strnlast(char *origin, int n) {
@@ -113,8 +114,6 @@ void cgoOnRtnDepthMarketData(int client, CQdamFtdcDepthMarketDataField* pDepthMa
 	if (insFilter(pDepthMarketData)) {
 		return;
 	}
-
-	printf("O[%f], A[%d@%f], B[%d@%f], L[%d@%f]\n", pDepthMarketData->OpenPrice, pDepthMarketData->AskVolume1, pDepthMarketData->AskPrice1, pDepthMarketData->BidVolume1, pDepthMarketData->BidPrice1, pDepthMarketData->Volume, pDepthMarketData->LastPrice);
 	
 	goOnRtnDepthMarketData(client, pDepthMarketData);
 }

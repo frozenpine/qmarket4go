@@ -13,7 +13,6 @@ import "C"
 import (
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"strconv"
 	"sync/atomic"
@@ -81,65 +80,65 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 	data.InstrumentStatus = insStatus(status)
 
 	{
-		if (qmdata.AskVolume1 > 0) && (qmdata.AskPrice1 != math.MaxFloat32) && (qmdata.AskPrice1 != math.MaxFloat64) {
+		if qmdata.AskVolume1 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice1), Volume: int(qmdata.AskVolume1)})
 		}
-		if (qmdata.AskVolume2 > 0) && (qmdata.AskPrice2 != math.MaxFloat32) && (qmdata.AskPrice2 != math.MaxFloat64) {
+		if qmdata.AskVolume2 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice2), Volume: int(qmdata.AskVolume2)})
 		}
-		if (qmdata.AskVolume3 > 0) && (qmdata.AskPrice3 != math.MaxFloat32) && (qmdata.AskPrice3 != math.MaxFloat64) {
+		if qmdata.AskVolume3 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice3), Volume: int(qmdata.AskVolume3)})
 		}
-		if (qmdata.AskVolume4 > 0) && (qmdata.AskPrice4 != math.MaxFloat32) && (qmdata.AskPrice4 != math.MaxFloat64) {
+		if qmdata.AskVolume4 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice4), Volume: int(qmdata.AskVolume4)})
 		}
-		if (qmdata.AskVolume5 > 0) && (qmdata.AskPrice5 != math.MaxFloat32) && (qmdata.AskPrice5 != math.MaxFloat64) {
+		if qmdata.AskVolume5 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice5), Volume: int(qmdata.AskVolume5)})
 		}
-		if (C.level2 == 1) && (qmdata.AskVolume6 > 0) && (qmdata.AskPrice6 != math.MaxFloat32) && (qmdata.AskPrice6 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.AskVolume6 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice6), Volume: int(qmdata.AskVolume6)})
 		}
-		if (C.level2 == 1) && (qmdata.AskVolume7 > 0) && (qmdata.AskPrice7 != math.MaxFloat32) && (qmdata.AskPrice7 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.AskVolume7 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice7), Volume: int(qmdata.AskVolume7)})
 		}
-		if (C.level2 == 1) && (qmdata.AskVolume8 > 0) && (qmdata.AskPrice8 != math.MaxFloat32) && (qmdata.AskPrice8 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.AskVolume8 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice8), Volume: int(qmdata.AskVolume8)})
 		}
-		if (C.level2 == 1) && (qmdata.AskVolume9 > 0) && (qmdata.AskPrice9 != math.MaxFloat32) && (qmdata.AskPrice9 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.AskVolume9 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice9), Volume: int(qmdata.AskVolume9)})
 		}
-		if (C.level2 == 1) && (qmdata.AskVolume10 > 0) && (qmdata.AskPrice10 != math.MaxFloat32) && (qmdata.AskPrice10 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.AskVolume10 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice10), Volume: int(qmdata.AskVolume10)})
 		}
 
-		if (qmdata.BidVolume1 > 0) && (qmdata.BidPrice1 != math.MaxFloat32) && (qmdata.BidPrice1 != math.MaxFloat64) {
+		if qmdata.BidVolume1 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice1), Volume: int(qmdata.BidVolume1)})
 		}
-		if (qmdata.BidVolume2 > 0) && (qmdata.BidPrice2 != math.MaxFloat32) && (qmdata.BidPrice2 != math.MaxFloat64) {
+		if qmdata.BidVolume2 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice2), Volume: int(qmdata.BidVolume2)})
 		}
-		if (qmdata.BidVolume3 > 0) && (qmdata.BidPrice3 != math.MaxFloat32) && (qmdata.BidPrice3 != math.MaxFloat64) {
+		if qmdata.BidVolume3 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice3), Volume: int(qmdata.BidVolume3)})
 		}
-		if (qmdata.BidVolume4 > 0) && (qmdata.BidPrice4 != math.MaxFloat32) && (qmdata.BidPrice4 != math.MaxFloat64) {
+		if qmdata.BidVolume4 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice4), Volume: int(qmdata.BidVolume4)})
 		}
-		if (qmdata.BidVolume5 > 0) && (qmdata.BidPrice5 != math.MaxFloat32) && (qmdata.BidPrice5 != math.MaxFloat64) {
+		if qmdata.BidVolume5 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice5), Volume: int(qmdata.BidVolume5)})
 		}
-		if (C.level2 == 1) && (qmdata.BidVolume6 > 0) && (qmdata.BidPrice6 != math.MaxFloat32) && (qmdata.BidPrice6 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.BidVolume6 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice6), Volume: int(qmdata.BidVolume6)})
 		}
-		if (C.level2 == 1) && (qmdata.BidVolume7 > 0) && (qmdata.BidPrice7 != math.MaxFloat32) && (qmdata.BidPrice7 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.BidVolume7 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice7), Volume: int(qmdata.BidVolume7)})
 		}
-		if (C.level2 == 1) && (qmdata.BidVolume8 > 0) && (qmdata.BidPrice8 != math.MaxFloat32) && (qmdata.BidPrice8 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.BidVolume8 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice8), Volume: int(qmdata.BidVolume8)})
 		}
-		if (C.level2 == 1) && (qmdata.BidVolume9 > 0) && (qmdata.BidPrice9 != math.MaxFloat32) && (qmdata.BidPrice9 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.BidVolume9 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice9), Volume: int(qmdata.BidVolume9)})
 		}
-		if (C.level2 == 1) && (qmdata.BidVolume10 > 0) && (qmdata.BidPrice10 != math.MaxFloat32) && (qmdata.BidPrice10 != math.MaxFloat64) {
+		if C.level2 == 1 && qmdata.BidVolume10 > 0 {
 			data.Bids = append(data.Bids, priceItem{Price: float64(qmdata.BidPrice10), Volume: int(qmdata.BidVolume10)})
 		}
 	}
