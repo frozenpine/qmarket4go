@@ -76,7 +76,7 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 	data.VolumeAskLot = int(qmdata.VolumeAskLot)
 	data.VolumeBidLot = int(qmdata.VolumeBidLot)
 
-	status, _ := strconv.ParseInt(C.GoString(&qmdata.InstrumentStatus), 10, 32)
+	status, _ := strconv.ParseInt(string(qmdata.InstrumentStatus), 10, 32)
 	data.InstrumentStatus = insStatus(status)
 
 	{
@@ -208,7 +208,7 @@ func convertBLMarketData(pMBLMarketData *C.CQdamFtdcMBLMarketDataField) *GoQdamF
 
 	data.InstrumentID = C.GoString(&pMBLMarketData.InstrumentID[0])
 
-	d, _ := strconv.ParseInt(C.GoString(&pMBLMarketData.Direction), 10, 32)
+	d, _ := strconv.ParseInt(string(pMBLMarketData.Direction), 10, 32)
 	data.Direction = direction(d)
 
 	data.Price = float64(pMBLMarketData.Price)
@@ -227,7 +227,7 @@ func convertQmdInstrumentState(pQmdInstrumentState *C.CQdamFtdcQmdInstrumentStat
 	data.ExchangeID = C.GoString(&pQmdInstrumentState.ExchangeID[0])
 	data.InstrumentID = C.GoString(&pQmdInstrumentState.InstrumentID[0])
 
-	status, _ := strconv.ParseInt(C.GoString(&pQmdInstrumentState.InstrumentStatus), 10, 32)
+	status, _ := strconv.ParseInt(string(pQmdInstrumentState.InstrumentStatus), 10, 32)
 	data.InstrumentStatus = insStatus(status)
 
 	return &data
@@ -503,60 +503,60 @@ func (api *QMdAPI) RegisterCallback(cb QMdAPICallback) {
 
 	callbacks[api.clientID] = cb
 
-	C.SetCallbackFunOnFrontConnected(C.int(api.clientID), (C.FunOnFrontConnected)(unsafe.Pointer(C.cgoOnFrontConnected)))
-	C.SetCallbackFunOnFrontDisconnected(C.int(api.clientID), (C.FunOnFrontDisconnected)(unsafe.Pointer(C.cgoOnFrontDisconnected)))
+	C.SetCallbackFunOnFrontConnected(C.ClientID(api.clientID), (C.FunOnFrontConnected)(unsafe.Pointer(C.cgoOnFrontConnected)))
+	C.SetCallbackFunOnFrontDisconnected(C.ClientID(api.clientID), (C.FunOnFrontDisconnected)(unsafe.Pointer(C.cgoOnFrontDisconnected)))
 
-	C.SetCallbackFunOnHeartBeatWarning(C.int(api.clientID), (C.FunOnHeartBeatWarning)(unsafe.Pointer(C.cgoOnHeartBeatWarning)))
-	C.SetCallbackFunOnPackageStart(C.int(api.clientID), (C.FunOnPackageStart)(unsafe.Pointer(C.cgoOnPackageStart)))
-	C.SetCallbackFunOnPackageEnd(C.int(api.clientID), (C.FunOnPackageStart)(unsafe.Pointer(C.cgoOnPackageEnd)))
+	C.SetCallbackFunOnHeartBeatWarning(C.ClientID(api.clientID), (C.FunOnHeartBeatWarning)(unsafe.Pointer(C.cgoOnHeartBeatWarning)))
+	C.SetCallbackFunOnPackageStart(C.ClientID(api.clientID), (C.FunOnPackageStart)(unsafe.Pointer(C.cgoOnPackageStart)))
+	C.SetCallbackFunOnPackageEnd(C.ClientID(api.clientID), (C.FunOnPackageStart)(unsafe.Pointer(C.cgoOnPackageEnd)))
 
-	C.SetCallbackFunUdpMarketData(C.int(api.clientID), (C.FunUdpMarketData)(unsafe.Pointer(C.cgoUDPMarketData)))
+	C.SetCallbackFunUdpMarketData(C.ClientID(api.clientID), (C.FunUdpMarketData)(unsafe.Pointer(C.cgoUDPMarketData)))
 
-	C.SetCallbackFunOnRspError(C.int(api.clientID), (C.FunOnRspError)(unsafe.Pointer(C.cgoOnRspError)))
+	C.SetCallbackFunOnRspError(C.ClientID(api.clientID), (C.FunOnRspError)(unsafe.Pointer(C.cgoOnRspError)))
 
-	C.SetCallbackFunOnRspUserLogin(C.int(api.clientID), (C.FunOnRspUserLogin)(unsafe.Pointer(C.cgoOnRspUserLogin)))
-	C.SetCallbackFunOnRspUserLogout(C.int(api.clientID), (C.FunOnRspUserLogout)(unsafe.Pointer(C.cgoOnRspUserLogout)))
+	C.SetCallbackFunOnRspUserLogin(C.ClientID(api.clientID), (C.FunOnRspUserLogin)(unsafe.Pointer(C.cgoOnRspUserLogin)))
+	C.SetCallbackFunOnRspUserLogout(C.ClientID(api.clientID), (C.FunOnRspUserLogout)(unsafe.Pointer(C.cgoOnRspUserLogout)))
 
-	C.SetCallbackFunOnRtnDepthMarketData(C.int(api.clientID), (C.FunOnRtnDepthMarketData)(unsafe.Pointer(C.cgoOnRtnDepthMarketData)))
-	C.SetCallbackFunOnRtnMultiDepthMarketData(C.int(api.clientID), (C.FunOnRtnMultiDepthMarketData)(unsafe.Pointer(C.cgoOnRtnMultiDepthMarketData)))
+	C.SetCallbackFunOnRtnDepthMarketData(C.ClientID(api.clientID), (C.FunOnRtnDepthMarketData)(unsafe.Pointer(C.cgoOnRtnDepthMarketData)))
+	C.SetCallbackFunOnRtnMultiDepthMarketData(C.ClientID(api.clientID), (C.FunOnRtnMultiDepthMarketData)(unsafe.Pointer(C.cgoOnRtnMultiDepthMarketData)))
 
-	C.SetCallbackFunOnRspSubMarketData(C.int(api.clientID), (C.FunOnRspSubMarketData)(unsafe.Pointer(C.cgoOnRspSubMarketData)))
-	C.SetCallbackFunOnRspUnSubMarketData(C.int(api.clientID), (C.FunOnRspUnSubMarketData)(unsafe.Pointer(C.cgoOnRspUnSubMarketData)))
+	C.SetCallbackFunOnRspSubMarketData(C.ClientID(api.clientID), (C.FunOnRspSubMarketData)(unsafe.Pointer(C.cgoOnRspSubMarketData)))
+	C.SetCallbackFunOnRspUnSubMarketData(C.ClientID(api.clientID), (C.FunOnRspUnSubMarketData)(unsafe.Pointer(C.cgoOnRspUnSubMarketData)))
 
-	C.SetCallbackFunOnRtnMBLMarketData(C.int(api.clientID), (C.FunOnRtnMBLMarketData)(unsafe.Pointer(C.cgoOnRtnMBLMarketData)))
+	C.SetCallbackFunOnRtnMBLMarketData(C.ClientID(api.clientID), (C.FunOnRtnMBLMarketData)(unsafe.Pointer(C.cgoOnRtnMBLMarketData)))
 
-	C.SetCallbackFunOnRtnQmdInstrumentStatu(C.int(api.clientID), (C.FunOnRtnQmdInstrumentStatu)(unsafe.Pointer(C.cgoOnRtnQmdInstrumentStatu)))
+	C.SetCallbackFunOnRtnQmdInstrumentStatu(C.ClientID(api.clientID), (C.FunOnRtnQmdInstrumentStatu)(unsafe.Pointer(C.cgoOnRtnQmdInstrumentStatu)))
 
-	C.SetCallbackFunOnRspSubscribeTopic(C.int(api.clientID), (C.FunOnRspSubscribeTopic)(unsafe.Pointer(C.cgoOnRspSubscribeTopic)))
-	C.SetCallbackFunOnRspQryTopic(C.int(api.clientID), (C.FunOnRspQryTopic)(unsafe.Pointer(C.cgoOnRspQryTopic)))
-	C.SetCallbackFunOnRspQryMarketData(C.int(api.clientID), (C.FunOnRspQryMarketData)(unsafe.Pointer(C.cgoOnRspQryMarketData)))
+	C.SetCallbackFunOnRspSubscribeTopic(C.ClientID(api.clientID), (C.FunOnRspSubscribeTopic)(unsafe.Pointer(C.cgoOnRspSubscribeTopic)))
+	C.SetCallbackFunOnRspQryTopic(C.ClientID(api.clientID), (C.FunOnRspQryTopic)(unsafe.Pointer(C.cgoOnRspQryTopic)))
+	C.SetCallbackFunOnRspQryMarketData(C.ClientID(api.clientID), (C.FunOnRspQryMarketData)(unsafe.Pointer(C.cgoOnRspQryMarketData)))
 }
 
 // RegisterFront API注册前置地址
 func (api *QMdAPI) RegisterFront(frontAddr string) {
 	api.FrontAddr = frontAddr
-	C.RegisterFront(C.int(api.clientID), C.CString(frontAddr))
+	C.RegisterFront(C.ClientID(api.clientID), C.CString(frontAddr))
 }
 
 // RegisterNameServer 注册Fens地址
 func (api *QMdAPI) RegisterNameServer(fensAddr string) {
 	api.FensAddr = fensAddr
-	C.RegisterNameServer(C.int(api.clientID), C.CString(fensAddr))
+	C.RegisterNameServer(C.ClientID(api.clientID), C.CString(fensAddr))
 }
 
 // SubscribeMarketDataTopic 订阅行情Topic
 func (api *QMdAPI) SubscribeMarketDataTopic(topicID, resumeType int) {
-	C.SubscribeMarketDataTopic(C.int(api.clientID), C.int(topicID), C.QDAM_TE_RESUME_TYPE(resumeType))
+	C.SubscribeMarketDataTopic(C.ClientID(api.clientID), C.int(topicID), C.QDAM_TE_RESUME_TYPE(resumeType))
 }
 
 // Init 初始化行情API连接
 func (api *QMdAPI) Init() {
-	C.Init(C.int(api.clientID))
+	C.Init(C.ClientID(api.clientID))
 }
 
 // Release 释放行情API资源
 func (api *QMdAPI) Release() {
-	C.Release(C.int(api.clientID))
+	C.Release(C.ClientID(api.clientID))
 }
 
 func (api *QMdAPI) getReqID() int64 {
@@ -578,7 +578,7 @@ func (api *QMdAPI) Login(login *GoQdamFtdcReqUserLoginField) int {
 	cPassword := C.CString(login.Password)
 	C.strncpy(&loginReq.Password[0], cPassword, C.sizeof_TQdamFtdcPasswordType-1)
 
-	rtn := C.ReqUserLogin(C.int(api.clientID), &loginReq, C.int(api.getReqID()))
+	rtn := C.ReqUserLogin(C.ClientID(api.clientID), &loginReq, C.int(api.getReqID()))
 
 	return int(rtn)
 }
@@ -597,7 +597,7 @@ func (api *QMdAPI) SubMarketData(instruments ...string) {
 		cStrings[idx] = C.CString(instruments[idx])
 	}
 
-	C.SubMarketData(C.int(api.clientID), &cStrings[0], C.int(count))
+	C.SubMarketData(C.ClientID(api.clientID), &cStrings[0], C.int(count))
 }
 
 // UnSubMarketData 取消合约行情订阅
@@ -609,7 +609,7 @@ func (api *QMdAPI) UnSubMarketData(instruments ...string) {
 		cStrings[idx] = C.CString(instruments[idx])
 	}
 
-	C.UnSubMarketData(C.int(api.clientID), &cStrings[0], C.int(count))
+	C.UnSubMarketData(C.ClientID(api.clientID), &cStrings[0], C.int(count))
 }
 
 // OnFrontConnected 前置连接消息
