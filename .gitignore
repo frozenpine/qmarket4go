@@ -2,7 +2,7 @@
 .vscode
 .git
 
-flow
+**/flow
 
 **/*.exe
 

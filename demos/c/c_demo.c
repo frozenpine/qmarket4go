@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/stat.h>
 
-#include "FtdcMdApiImpl.h"
+#include "../../FtdcMdApiImpl.h"
 
 #ifdef WIN32
 #define MKDIR(path) {mkdir(path);}
