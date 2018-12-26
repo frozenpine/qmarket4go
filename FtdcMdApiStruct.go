@@ -19,9 +19,20 @@ func (d direction) ToString() string {
 		return "买"
 	case Sell:
 		return "卖"
+	default:
+		panic("invalid direction value")
 	}
+}
 
-	return ""
+func (d direction) Opposite() direction {
+	switch d {
+	case Buy:
+		return Sell
+	case Sell:
+		return Buy
+	default:
+		panic("invalid direction value")
+	}
 }
 
 type insStatus int
