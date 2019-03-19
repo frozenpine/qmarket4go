@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	. "gitlab.quantdo.cn/yuanyang/qmarket4go"
+	. "github.com/frozenpine/qmarket4go"
 )
 
 type myAPI struct {
