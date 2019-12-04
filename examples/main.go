@@ -6,27 +6,33 @@ import (
 	"strings"
 	"time"
 
-	. "github.com/frozenpine/qmarket4go"
+	"github.com/frozenpine/qmarket4go"
 )
 
 type myAPI struct {
-	QMdAPI
+	qmarket4go.QMdAPI
 }
 
 var (
+	front    string
 	userID   string
 	brokerID string
 	password string
+	sub      string
 	subList  []string
 )
 
 func (md *myAPI) OnFrontConnected() {
 	md.QMdAPI.OnFrontConnected()
 
-	md.Login(&GoQdamFtdcReqUserLoginField{UserID: userID, BrokerID: brokerID, Password: password})
+	md.Login(&qmarket4go.GoQdamFtdcReqUserLoginField{UserID: userID, BrokerID: brokerID, Password: password})
 }
 
-func (md *myAPI) OnRspUserLogin(rsp *GoQdamFtdcRspUserLoginField, err *GoQdamFtdcRspInfoField, reqID int, isLast bool) {
+func (md *myAPI) OnRspUserLogin(
+	rsp *qmarket4go.GoQdamFtdcRspUserLoginField,
+	err *qmarket4go.GoQdamFtdcRspInfoField,
+	reqID int, isLast bool,
+) {
 	md.QMdAPI.OnRspUserLogin(rsp, err, reqID, isLast)
 
 	if err.ErrorID == 0 {
@@ -36,31 +42,30 @@ func (md *myAPI) OnRspUserLogin(rsp *GoQdamFtdcRspUserLoginField, err *GoQdamFtd
 	}
 }
 
+func init() {
+	flag.StringVar(&front, "front", "", "Front conn string")
+	flag.StringVar(&sub, "sub", "*", "Subscribe market datas")
+	flag.StringVar(&userID, "user", "123456", "UserID")
+	flag.StringVar(&brokerID, "broker", "0001", "BrokerID")
+	flag.StringVar(&password, "pass", "111111", "Password")
+}
+
 func main() {
-	ptrFrontAddress := flag.String("front", "", "Front conn string")
-	ptrSubInstruments := flag.String("sub", "*", "Subscribe market datas")
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 
-	ptrUserID := flag.String("user", "123456", "UserID")
-	ptrBrokerID := flag.String("broker", "0001", "BrokerID")
-	ptrPassword := flag.String("pass", "111111", "Password")
-
-	flag.Parse()
-
-	userID = *ptrUserID
-	brokerID = *ptrBrokerID
-	password = *ptrPassword
-
-	if *ptrFrontAddress == "" {
+	if front == "" {
 		fmt.Println("Front address must be specified by -front")
 		return
 	}
 
-	subList = strings.Split(*ptrSubInstruments, ",")
+	subList = strings.Split(sub, ",")
 
 	api := myAPI{}
 	api.InitAPI("./flow/")
 	api.RegisterCallback(&api)
-	api.RegisterFront(*ptrFrontAddress)
+	api.RegisterFront(front)
 	api.Init()
 
 	for {
