@@ -6,4 +6,6 @@
 
 **/*.exe
 
+**/demo
+
 **/debug*

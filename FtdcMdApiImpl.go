@@ -123,7 +123,7 @@ func convertDepthMarketData(qmdata *C.CQdamFtdcDepthMarketDataField) *GoQdamFtdc
 		}
 	}
 
-	if C.level2 == 1 {
+	if C.isLevel2() == 1 {
 		if qmdata.AskVolume6 > 0 {
 			data.Asks = append(data.Asks, priceItem{Price: float64(qmdata.AskPrice6), Volume: int(qmdata.AskVolume6)})
 

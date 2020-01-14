@@ -3,6 +3,14 @@
 
 #include "cgoFtcdMdApiImpl.h"
 
+int isLevel2() {
+#ifdef LEVEL2
+	return 1;
+#else
+	return 0;
+#endif
+}
+
 char* strnlast(char *origin, int n) {
 	int len = strlen(origin);
 	if (n > len) {

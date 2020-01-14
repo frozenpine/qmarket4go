@@ -9,13 +9,9 @@ function name with prefix "cgo" used to be registered for C callback & passthrou
 function name with prefix "go" defined in go code file and transform C callback data structure to go structure;
 */
 
-#ifdef LEVEL2
-static const bool level2 = true;
-#else
-static const bool level2 = false;
-#endif
-
 char* strnlast(char*, int);
+
+int isLevel2();
 
 // Instruments that should be ignored will return true
 bool insFilter(CQdamFtdcDepthMarketDataField *);

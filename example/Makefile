@@ -47,6 +47,5 @@ vet:
 
 clean:
 	@if [ -f ${BINARY} ] ; then rm ${BINARY} ; fi
-	@if [ -f ${BINARY}.exe ] ; then rm ${BINARY}.exe ; fi
 
 .PHONY: default fmt fmt-check install test vet docker clean
