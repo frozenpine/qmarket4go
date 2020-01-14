@@ -3,7 +3,7 @@
 
 ## Installation
 ```bash
-$ go get -v -insecure github.com/frozenpine/qmarket4go
+$ go get -v github.com/frozenpine/qmarket4go
 ```
 
 Go语言版本: `Go >= 1.5`
