@@ -153,30 +153,30 @@ type GoQdamFtdcDisseminationField struct {
 
 // GoQdamFtdcRspMarketDataField 行情应答
 type GoQdamFtdcRspMarketDataField struct {
-	ExchangeID         string
-	TradingDay         string
-	PreSettlementPrice float64
-	PreClosePrice      float64
-	PreOpenInterest    float64
-	PreDelta           float64
-	OpenPrice          float64
-	HighestPrice       float64
-	LowestPrice        float64
-	ClosePrice         float64
-	UpperLimitPrice    float64
-	LowerLimitPrice    float64
-	SettlementPrice    float64
-	CurrDelta          float64
-	LastPrice          float64
-	Volume             int
-	Turnover           float64
-	OpenInterest       float64
-	BidPrice           float64
-	BidVolume          int
-	AskPrice           float64
-	AskVolume          int
-	InstrumentID       string
-	UpdateTime         time.Time
+	ExchangeID         string    `csv:"ExchangeID"`
+	TradingDay         string    `csv:"TradingDay"`
+	PreSettlementPrice float64   `csv:"PreSettlementPrice"`
+	PreClosePrice      float64   `csv:"PreClosePrice"`
+	PreOpenInterest    float64   `csv:"PreOpenInterest"`
+	PreDelta           float64   `csv:"PreDelta"`
+	OpenPrice          float64   `csv:"OpenPrice"`
+	HighestPrice       float64   `csv:"HighestPrice"`
+	LowestPrice        float64   `csv:"LowestPrice"`
+	ClosePrice         float64   `csv:"ClosePrice"`
+	UpperLimitPrice    float64   `csv:"UpperLimitPrice"`
+	LowerLimitPrice    float64   `csv:"LowerLimitPrice"`
+	SettlementPrice    float64   `csv:"SettlementPrice"`
+	CurrDelta          float64   `csv:"CurrDelta"`
+	LastPrice          float64   `csv:"LastPrice"`
+	Volume             int       `csv:"Volume"`
+	Turnover           float64   `csv:"Turnover"`
+	OpenInterest       float64   `csv:"OpenInterest"`
+	BidPrice           float64   `csv:"BidPrice"`
+	BidVolume          int       `csv:"BidVolume"`
+	AskPrice           float64   `csv:"AskPrice"`
+	AskVolume          int       `csv:"AskVolume"`
+	InstrumentID       string    `csv:"InstrumentID"`
+	UpdateTime         time.Time `csv:"UpdateTime"`
 }
 
 // GoQdamFtdcShmDepthMarketDataField 共享内存行情查询
