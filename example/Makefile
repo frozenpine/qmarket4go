@@ -1,4 +1,4 @@
-NAME="demo"
+NAME="qmddemo"
 VERSION=1.0.0
 BUILD=`date +%FT%T%z`
 
